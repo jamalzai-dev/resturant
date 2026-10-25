@@ -1,0 +1,13 @@
+# Keep original source assets locally
+/reference-assets/
+/images/
+
+# Exclude exported archives
+*.zip
+
+# Existing generated-file exclusions
+node_modules/
+dist/
+test-results/
+playwright-report/
+.qa/
