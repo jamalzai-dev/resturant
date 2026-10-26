@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Header } from './components/Header';
 import {
   Hero,
+  AfghanEditorial,
   Signature,
   FamilyPlatter,
   JuiceBar,
@@ -69,8 +70,9 @@ export default function App() {
           <main id="main">
             <Hero />
             <Signature />
-            <PizzaShowcase />
             <MenuSection />
+            <PizzaShowcase />
+            <AfghanEditorial />
             <FamilyPlatter />
             <JuiceBar />
             <Gallery />

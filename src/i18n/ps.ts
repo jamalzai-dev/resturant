@@ -12,6 +12,7 @@ export const ps: Translation = {
   pageDescription:
     'د {restaurant} نمونوي مېنو: پیزا، افغاني خواړه، پلیټرونه، جوس او ایسکریم. دوه ژبې او د ټیلیفوني فرمایش جوړول وازمویئ.',
   nav: {
+    signature: 'ځانګړي خواړه',
     home: 'کورپاڼه',
     menu: 'مېنو',
     gallery: 'انځورونه',

@@ -13,7 +13,6 @@ import {
   Sun,
   Truck,
   UsersRound,
-  UtensilsCrossed,
 } from 'lucide-react';
 import { BUSINESS, NAVIGATION } from '../config/business';
 import { deliveryStatus } from '../config/delivery';
@@ -26,6 +25,7 @@ import { Dialog } from './Dialog';
 import { Brand } from './Brand';
 import { ContactLink } from './ContactLink';
 import { MenuLink } from './MenuSection';
+import { useOrder } from './OrderContext';
 import { SECTIONS } from '../config/sections';
 import type { PizzaSize } from '../data/menu';
 
@@ -75,21 +75,12 @@ export function Hero() {
             className="hero-photo"
             sizes="(max-width: 760px) 100vw, 52vw"
           />
-          <div className="hero-photo-shade" />
           <div className="hero-image-caption">
             <span>{SITE_IMAGES.hero.preview ? t.heroImageNote : t.heroImageNoteReal}</span>
-            <p>{t.heroImageTitle}</p>
           </div>
-          <div className="hospitality-seal">
-            <span>{t.stampTop}</span>
-            <UtensilsCrossed strokeWidth={1} size={27} />
-            <span>{t.stampBottom}</span>
-          </div>
-          <span className="hero-photo-index" aria-hidden="true">
-            01 — 03
-          </span>
         </div>
       </section>
+      <CategoryPreviews />
       <div className="hospitality-strip">
         <div className="container">
           <div>
@@ -390,6 +381,7 @@ export function About() {
 }
 
 export function Contact() {
+  const { open } = useOrder();
   const { t, language, money } = useLanguage();
   const deliveryDescription = interpolate(t.deliveryBody, {
     nearby: money(deliveryStatus(0, 'nearby').minimum),
@@ -400,6 +392,23 @@ export function Contact() {
       <div className="section-heading centered">
         <span className="eyebrow">{t.contactEyebrow}</span>
         <h2>{t.contactTitle}</h2>
+      </div>
+      <div className="contact-promo">
+        <div>
+          <span className="eyebrow">{t.heroEyebrow}</span>
+          <h3>{t.aboutBody}</h3>
+          <div className="hero-buttons">
+            <a className="button primary" href="#menu">
+              {t.explore}
+              <ArrowUpRight size={18} />
+            </a>
+            <button className="button secondary" onClick={open}>
+              {t.order}
+              <ShoppingBag size={18} />
+            </button>
+          </div>
+        </div>
+        <Photo image={SITE_IMAGES.menu['special-zinger']} sizes="(max-width:760px) 90vw, 40vw" />
       </div>
       <div className="contact-grid">
         <div className="location-card">
@@ -509,5 +518,60 @@ export function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+export function CategoryPreviews() {
+  const { t } = useLanguage();
+  return (
+    <div className="category-previews container">
+      {SECTIONS.categoryPreviews.map(({ category, id }) => {
+        const dish = MENU.find((item) => item.id === id)!;
+        return (
+          <MenuLink key={category} category={category} className="category-preview">
+            <Photo image={dish.image} sizes="(max-width:760px) 42vw, 20vw" />
+            <span>
+              <strong>{t.categories[category]}</strong>
+              <ArrowUpRight className="directional" size={20} />
+            </span>
+          </MenuLink>
+        );
+      })}
+    </div>
+  );
+}
+
+export function AfghanEditorial() {
+  const { t, language, money } = useLanguage();
+  return (
+    <section className="afghan-editorial container section-space">
+      <div className="section-heading heading-split">
+        <div>
+          <span className="eyebrow">{t.categories.rice}</span>
+          <h2>{t.editorialTitle}</h2>
+        </div>
+        <MenuLink category="rice" className="text-link">
+          {t.fullMenu}
+          <ArrowUpRight size={18} />
+        </MenuLink>
+      </div>
+      <div className="editorial-grid">
+        {SECTIONS.editorialIds.map((id) => {
+          const dish = MENU.find((item) => item.id === id)!;
+          return (
+            <article className="editorial-card" key={id}>
+              <Photo image={dish.image} sizes="(max-width:760px) 90vw, 45vw" />
+              <div>
+                <span>
+                  <h3>{dish.name[language]}</h3>
+                  <p>{money(dish.price!)}</p>
+                </span>
+                <AddButton item={dish} compact />
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
   );
 }

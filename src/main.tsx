@@ -4,6 +4,7 @@ import App from './App';
 import './fonts.css';
 import './styles.css';
 import './template.css';
+import './minimal.css';
 import { applyTheme } from './config/theme';
 
 applyTheme();

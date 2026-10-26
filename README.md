@@ -1,4 +1,4 @@
-# ZarChinar Restaurant
+# Pizza Max — Restaurant Template
 
 A reusable React, TypeScript and Vite restaurant demo with English/Pashto, RTL layouts, local photography and fonts, a searchable menu, pizza sizes, platters, a gallery and a phone-order builder. No backend, account, payment or automatic order submission.
 
@@ -22,7 +22,7 @@ Production files are in `dist/`, ready for static hosting. No API keys or enviro
 | `src/config/business.ts`           | Brand name in both languages, logo/favicon, unique ID, demo flag, phone, address, city, country, hours, map URL and cuisine |
 | `src/config/content.ts`            | Hero slogans and the short marketing copy in both languages                                                                 |
 | `src/config/theme.ts`              | Paper, cream, primary, hover, text, accent, border and feedback colors                                                      |
-| `src/config/sections.ts`           | Featured dishes, pizza showcase, juice selections, initial menu category and page size                                      |
+| `src/config/sections.ts`           | Category shortcuts, editorial dishes, pizza showcase, juice selections, initial menu category and page size                 |
 | `src/data/menu.ts`                 | All 53 dishes, bilingual names/descriptions, AFN prices, three pizza sizes and platter contents                             |
 | `src/config/siteImages.ts`         | Every food, interior, hero and gallery photograph, source sizes and bilingual alt text                                      |
 | `src/config/delivery.ts`           | Nearby/city delivery minimums; pickup has no minimum                                                                        |
@@ -100,3 +100,9 @@ node scripts/capture-preview.mjs
 Browser checks use installed Microsoft Edge in headless mode. On other systems, install Playwright Chromium and remove `channel: 'msedge'` in `playwright.config.ts` and the browser scripts. Tests cover menu access/search, size/price calculations, delivery thresholds, tickets, demo contact behavior, keyboard dialogs, bilingual persistence, image fallbacks and 320–1440px layouts. Automated accessibility checks supplement visual and keyboard review.
 
 The ZIP excludes dependencies, generated builds, test artifacts and previous-client assets. It includes source, configuration, local demo assets, tests and this guide.
+
+## Minimalist visual system
+
+The current design uses warm cream and sand surfaces, charcoal typography, and saffron actions. `src/minimal.css` is the final `redesign` cascade layer, loaded after the existing structural styles. It controls the new hero composition, rounded category shortcuts, editorial food cards, menu, platters, gallery, contact feature, drawer and dark footer without changing ordering logic. Colors remain in `src/config/theme.ts`; the legacy `green` variable maps to charcoal text, while `primary` is the saffron action color. Locally served DM Sans and Vazirmatn provide matching bold English/Pashto headings.
+
+Homepage dish selections and category shortcuts are editable in `src/config/sections.ts`. New section copy lives in `src/config/content.ts`. All 53 menu records and 106 responsive image files remain unchanged. The hero reuses the existing pizza photograph with a circular CSS crop; no new food assets or original PNGs are required.

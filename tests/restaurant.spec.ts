@@ -143,7 +143,7 @@ test('Pashto mobile navigation, order ticket and persistence', async ({ page }) 
   await page.goto('/');
   await page.getByRole('button', { name: 'Switch to Pashto' }).click();
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-  await expect(page.locator('h1')).toContainText('زموږ سره.');
+  await expect(page.locator('h1')).toContainText('تازه خواړه.');
   await page.getByRole('button', { name: 'لارښود پرانیستل', exact: true }).click();
   await page.locator('#mobile-navigation').getByRole('link', { name: 'مېنو', exact: true }).click();
   await expect(page.locator('#mobile-navigation')).toHaveCount(0);
@@ -310,4 +310,29 @@ test('all 53 dishes have distinct responsive images and platter previews track s
       .locator('.gallery-tile')
       .filter({ has: page.locator('img[src="/images/menu/afghani-kebab-1440.webp"]') }),
   ).toHaveCount(1);
+});
+
+test('redesigned category shortcuts, specials navigation and editorial ordering', async ({ page }) => {
+  await page.goto('/');
+  const shortcuts = page.locator('.category-previews a');
+  for (const [index, category] of [
+    'Pizza & burgers',
+    'Rice & traditional',
+    'Broast & burger',
+    'Fresh juices',
+  ].entries()) {
+    await shortcuts.nth(index).click();
+    await expect(
+      page.locator('.menu-filters').getByRole('button', { name: category, exact: true }),
+    ).toHaveAttribute('aria-pressed', 'true');
+  }
+  await page.locator('.desktop-nav').getByRole('link', { name: 'Our specials' }).click();
+  await expect(page).toHaveURL(/#signature$/);
+  await page.locator('.editorial-card').filter({ hasText: 'Rosh / Meat Dish' }).getByRole('button').click();
+  await page.locator('.contact-promo').getByRole('button', { name: 'Your order', exact: true }).click();
+  await expect(page.getByTestId('subtotal')).toHaveText('250 AFN');
+  await expect(page.locator('.order-line')).toContainText('Rosh / Meat Dish');
+  await page.keyboard.press('Escape');
+  await page.locator('.language-button').click();
+  await expect(page.locator('.afghan-editorial h2')).toContainText('افغاني خواړه');
 });

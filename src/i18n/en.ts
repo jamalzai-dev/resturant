@@ -11,6 +11,7 @@ export const en = {
   pageDescription:
     'Explore the {restaurant} restaurant demo: pizza, Afghan dishes, platters, juices and ice cream. Try the bilingual menu and phone-order builder.',
   nav: {
+    signature: 'Our specials',
     home: 'Home',
     menu: 'Menu',
     gallery: 'Gallery',
