@@ -1,6 +1,8 @@
 /** Client-facing copy, separate from reusable interface translations. */
 export const BRAND_COPY = {
   en: {
+    venueHeadline: 'Good food.\nA place to gather.',
+    venueDescription: 'Pizza, Afghan favourites and a table for the whole family.',
     heroEyebrow: 'WELCOME TO {shortName}',
     heroTitle1: 'Fresh food.',
     heroTitle2: 'Good mood.',
@@ -24,7 +26,7 @@ export const BRAND_COPY = {
     juiceTitle: 'A fresh finish.',
     juiceBody: 'A cold juice or a scoop of ice cream. There’s always room for a little more.',
     galleryEyebrow: 'TAKE A LOOK',
-    galleryTitle: 'Food, drinks & good company.',
+    galleryTitle: 'Inside {shortName}',
     aboutEyebrow: 'ABOUT {shortName}',
     aboutTitle: 'Good food.\nA comfortable place.',
     aboutBody: 'Clean and delicious food is our priority.',
@@ -33,6 +35,8 @@ export const BRAND_COPY = {
     footerMessage: 'Fresh food.\nYou’re welcome here.',
   },
   ps: {
+    venueHeadline: 'ښه خواړه.\nد یوځای کېدو ځای.',
+    venueDescription: 'پیزا، غوره افغاني خواړه او د ټولې کورنۍ لپاره دسترخوان.',
     heroEyebrow: '{shortName} ته ښه راغلاست',
     heroTitle1: 'تازه خواړه.',
     heroTitle2: 'خوندور خواړه.',
@@ -55,7 +59,7 @@ export const BRAND_COPY = {
     juiceTitle: 'یو تازه خوند.',
     juiceBody: 'یخ جوس یا خوندور ایسکریم. د خوړو ترڅنګ خپله خوښه وټاکئ.',
     galleryEyebrow: 'انځورونه وګورئ',
-    galleryTitle: 'خواړه، څښاک او ملګرتیا.',
+    galleryTitle: 'د {shortName} دننه',
     aboutEyebrow: 'د {shortName} په اړه',
     aboutTitle: 'ښه خواړه.\nهوسا ځای.',
     aboutBody: 'پاک او خوندور خواړه زموږ لومړیتوب دی.',

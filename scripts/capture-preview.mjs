@@ -20,12 +20,11 @@ try {
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({ path: `.qa/pizza-max-${language}-${width}-hero.png` });
       for (const [section, selector] of Object.entries({
-        pizza: '.pizza-showcase',
+        categories: '.category-previews',
         menu: '#menu',
         platters: '.platter-section',
         desserts: '.juice-section',
         gallery: '#gallery',
-        about: '#about',
         contact: '#contact',
         footer: 'footer',
       })) {
@@ -37,7 +36,7 @@ try {
     }
   }
   console.log(
-    'Saved hero, pizza, menu, platters, desserts, gallery, about, contact and footer previews in both languages at desktop, tablet and mobile widths.',
+    'Saved hero, categories, menu, platters, desserts, gallery, contact and footer previews in both languages at desktop, tablet and mobile widths.',
   );
 } finally {
   await browser.close();

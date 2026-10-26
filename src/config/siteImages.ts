@@ -23,6 +23,19 @@ const dishPhoto = (id: string, en: string, ps: string, height = 960): SiteImage 
 });
 
 const menu = {
+  'afghan-tikka-roll': dishPhoto('afghan-tikka-roll', 'Afghan Chicken Tikka Roll', 'افغاني چکن تکه رول'),
+  'beef-kabab-roll': dishPhoto('beef-kabab-roll', 'Beef Kabab Roll', 'د غوښې کباب رول'),
+  'spicy-chutney-roll': dishPhoto('spicy-chutney-roll', 'Spicy Chutney Roll', 'د تندې چټنۍ رول'),
+  'egg-potato-roll': dishPhoto('egg-potato-roll', 'Egg & Potato Roll', 'د هګۍ او کچالو رول'),
+  'afghan-crispy-broast': dishPhoto(
+    'afghan-crispy-broast',
+    'Afghan Style Crispy Broast',
+    'افغاني کرسپي بروست',
+  ),
+  'charcoal-wings': dishPhoto('charcoal-wings', 'Charcoal Grilled Wings', 'د سکرو وزرونه'),
+  'spicy-fried-wings': dishPhoto('spicy-fried-wings', 'Spicy Fried Wings', 'تند سره شوي وزرونه'),
+  'garlic-broast': dishPhoto('garlic-broast', 'Garlic Broast', 'د هوږې بروست'),
+
   'special-pizza': dishPhoto('special-pizza', 'Special Pizza', 'فل سپیشل پیزا'),
   'cheese-pizza': dishPhoto('cheese-pizza', 'Cheese Pizza', 'چیز پیزا'),
   'crown-pizza': dishPhoto('crown-pizza', 'Crown Crust Pizza', 'کراون کرسټ پیزا'),
@@ -78,21 +91,94 @@ const menu = {
   'pineapple-ice': dishPhoto('pineapple-ice', 'Pineapple Ice Cream', 'انناس ایسکریم', 1080),
 };
 
-const interior: SiteImage = {
-  src: '/images/interior-1440.webp',
-  srcSet: '/images/interior-640.webp 640w, /images/interior-1440.webp 1440w',
-  alt: {
-    en: 'Illustrative dining room with warm lighting and arches',
-    ps: 'بېلګه: د طاقونو لرونکی روښانه د خوړو تالار',
-  },
-  preview: true,
+export const VENUE_FILTERS = ['all', 'exterior', 'interior', 'dining', 'kitchen', 'experience'] as const;
+const venue = {
+  'dining-window': {
+    src: '/images/venue/dining-window-1440.webp',
+    srcSet: '/images/venue/dining-window-640.webp 640w, /images/venue/dining-window-1440.webp 1440w',
+    width: 1440,
+    height: 1920,
+    alt: {
+      en: 'Stock: wooden dining tables beside tall garden-facing windows',
+      ps: 'سټاک: د لویو کړکیو ترڅنګ د خوړو لرګین مېزونه',
+    },
+    preview: true,
+  } satisfies SiteImage,
+  'interior-architecture': {
+    src: '/images/venue/interior-architecture-1440.webp',
+    srcSet:
+      '/images/venue/interior-architecture-640.webp 640w, /images/venue/interior-architecture-1440.webp 1440w',
+    width: 1440,
+    height: 2160,
+    alt: {
+      en: 'Stock: warm restaurant architecture, pendant lights and booth seating',
+      ps: 'سټاک: د رسټورانټ داخلي جوړښت، څراغونه او څوکۍ',
+    },
+    preview: true,
+  } satisfies SiteImage,
+  'dining-tables': {
+    src: '/images/venue/dining-tables-1440.webp',
+    srcSet: '/images/venue/dining-tables-640.webp 640w, /images/venue/dining-tables-1440.webp 1440w',
+    width: 1440,
+    height: 1920,
+    alt: {
+      en: 'Stock: carefully arranged dining tables and woven chairs',
+      ps: 'سټاک: منظم د خوړو مېزونه او څوکۍ',
+    },
+    preview: true,
+  } satisfies SiteImage,
+  'exterior-day': {
+    src: '/images/venue/exterior-day-1440.webp',
+    srcSet: '/images/venue/exterior-day-640.webp 640w, /images/venue/exterior-day-1440.webp 1440w',
+    width: 1440,
+    height: 1920,
+    alt: {
+      en: 'Stock: restaurant entrance with wooden seating and trailing greenery',
+      ps: 'سټاک: د رسټورانټ دروازه، لرګینې څوکۍ او شنه بوټي',
+    },
+    preview: true,
+  } satisfies SiteImage,
+  'exterior-evening': {
+    src: '/images/venue/exterior-evening-1440.webp',
+    srcSet: '/images/venue/exterior-evening-640.webp 640w, /images/venue/exterior-evening-1440.webp 1440w',
+    width: 1440,
+    height: 2160,
+    alt: {
+      en: 'Stock: warmly illuminated restaurant entrance at dusk',
+      ps: 'سټاک: په ماښام کې د رسټورانټ روښانه دروازه',
+    },
+    preview: true,
+  } satisfies SiteImage,
+  kitchen: {
+    src: '/images/venue/kitchen-1440.webp',
+    srcSet: '/images/venue/kitchen-640.webp 640w, /images/venue/kitchen-1440.webp 1440w',
+    width: 1440,
+    height: 960,
+    alt: {
+      en: 'Stock: chefs preparing pizzas in a working restaurant kitchen',
+      ps: 'سټاک: اشپزان په پخلنځي کې پیزا چمتو کوي',
+    },
+    preview: true,
+  } satisfies SiteImage,
+  experience: {
+    src: '/images/venue/experience-1440.webp',
+    srcSet: '/images/venue/experience-640.webp 640w, /images/venue/experience-1440.webp 1440w',
+    width: 1440,
+    height: 2160,
+    alt: {
+      en: 'Stock: two men sharing a meal and conversation in a cafe',
+      ps: 'سټاک: دوه نارینه په کافه کې یوځای خواړه خوري او خبرې کوي',
+    },
+    preview: true,
+  } satisfies SiteImage,
 };
+const interior = venue['dining-window'];
 
-// Featured and gallery images reference the same dish records, so a photo
-// replacement automatically stays consistent across every part of the website.
+// Food showcases share menu records. Hero and gallery share the separate venue collection.
 export const SITE_IMAGES = {
   menu,
-  hero: menu['special-pizza'],
+  venue,
+  hero: venue['dining-window'],
   featured: { pulao: menu['kabuli-palaw'], kebab: menu['afghani-kebab'], pizza: menu['special-pizza'] },
   platters: {
     'platter-2': menu['platter-2'],
@@ -105,11 +191,12 @@ export const SITE_IMAGES = {
   interiors: { dining: interior },
   about: interior,
   gallery: [
-    { id: 'dining', category: 'interiors', image: interior },
-    { id: 'grill', category: 'dishes', image: menu['afghani-kebab'] },
-    { id: 'juice', category: 'juices', image: menu.strawberry },
-    { id: 'rice', category: 'dishes', image: menu['kabuli-palaw'] },
-    { id: 'pizza', category: 'dishes', image: menu['special-pizza'] },
-    { id: 'mango', category: 'juices', image: menu.mango },
+    { id: 'dining-window', category: 'dining', image: venue['dining-window'] },
+    { id: 'interior-architecture', category: 'interior', image: venue['interior-architecture'] },
+    { id: 'dining-tables', category: 'dining', image: venue['dining-tables'] },
+    { id: 'exterior-day', category: 'exterior', image: venue['exterior-day'] },
+    { id: 'exterior-evening', category: 'exterior', image: venue['exterior-evening'] },
+    { id: 'kitchen', category: 'kitchen', image: venue['kitchen'] },
+    { id: 'experience', category: 'experience', image: venue['experience'] },
   ],
 };

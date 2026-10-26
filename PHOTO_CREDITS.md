@@ -1,6 +1,6 @@
 # Template photography and fonts
 
-The current menu uses 53 individually generated food illustrations, identified on the site as demo imagery. Their exact prompts and provenance are in [docs/menu-image-provenance.json](docs/menu-image-provenance.json). The dining-room image is stock photography. The stock food photographs listed below and in [PHOTO_CREDITS_DEMO.md](PHOTO_CREDITS_DEMO.md) remain as unused alternatives. The geometric pizza icon in `public/brand/pizza-max-icon.svg` was created for this demo. Previous client-owned assets are preserved outside `public/` and are not distributed with this template.
+The current menu uses 61 individually generated food illustrations, identified on the site as demo imagery. Their exact prompts and provenance are in [docs/menu-image-provenance.json](docs/menu-image-provenance.json). Eight new dish prompts are recorded in [docs/menu-expansion-provenance.json](docs/menu-expansion-provenance.json). The venue hero and gallery use seven stock photographs; see [PHOTO_CREDITS_VENUE.md](PHOTO_CREDITS_VENUE.md). The old dining-room asset below is retained as an unused alternative. The stock food photographs listed below and in [PHOTO_CREDITS_DEMO.md](PHOTO_CREDITS_DEMO.md) remain as unused alternatives. The geometric pizza icon in `public/brand/pizza-max-icon.svg` was created for this demo. Previous client-owned assets are preserved outside `public/` and are not distributed with this template.
 
 ## Unsplash — standard free license
 

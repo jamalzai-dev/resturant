@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   ArrowUpRight,
   Check,
@@ -147,6 +147,7 @@ export function MenuLink({
 
 export function MenuSection() {
   const { t, number } = useLanguage();
+  const filtersRef = useRef<HTMLDivElement>(null);
   const [category, setCategory] = useState<Category>(SECTIONS.defaultCategory);
   const [query, setQuery] = useState('');
   const [limit, setLimit] = useState(SECTIONS.menuPageSize);
@@ -163,6 +164,16 @@ export function MenuSection() {
     window.addEventListener('restaurant:menu', handler);
     return () => window.removeEventListener('restaurant:menu', handler);
   }, []);
+  useEffect(() => {
+    const list = filtersRef.current;
+    const active = list?.querySelector<HTMLElement>('[aria-pressed="true"]');
+    if (!list || !active) return;
+    const offset = active.getBoundingClientRect().left - list.getBoundingClientRect().left;
+    list.scrollBy({
+      left: offset - (list.clientWidth - active.clientWidth) / 2,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+    });
+  }, [category, query]);
   const term = query.trim().toLocaleLowerCase();
   const filtered = MENU.filter((item) =>
     term
@@ -197,7 +208,7 @@ export function MenuSection() {
             </button>
           )}
         </div>
-        <div className="filter-list menu-filters" role="group" aria-label={t.nav.menu}>
+        <div ref={filtersRef} className="filter-list menu-filters" role="group" aria-label={t.nav.menu}>
           {CATEGORIES.map((value) => (
             <button
               key={value}

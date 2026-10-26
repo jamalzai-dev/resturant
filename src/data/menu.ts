@@ -1,6 +1,17 @@
 import type { Localized } from '../config/business';
 import { SITE_IMAGES, type SiteImage } from '../config/siteImages';
-export const CATEGORIES = ['all', 'pizza', 'rice', 'kebab', 'crispy', 'platter', 'juice', 'dessert'] as const;
+export const CATEGORIES = [
+  'all',
+  'pizza',
+  'rice',
+  'kebab',
+  'rolls',
+  'burgers',
+  'crispy',
+  'platter',
+  'juice',
+  'dessert',
+] as const;
 export type Category = (typeof CATEGORIES)[number];
 export type PizzaSize = 'small' | 'medium' | 'large';
 export type MenuItem = {
@@ -362,7 +373,7 @@ export const MENU: MenuItem[] = [
   },
   {
     id: 'wings',
-    category: 'kebab',
+    category: 'crispy',
     price: 200,
     name: {
       en: 'Spicy Wings',
@@ -404,7 +415,7 @@ export const MENU: MenuItem[] = [
   },
   {
     id: 'pizza-roll',
-    category: 'pizza',
+    category: 'rolls',
     price: 120,
     name: {
       en: 'Pizza Roll',
@@ -418,7 +429,7 @@ export const MENU: MenuItem[] = [
   },
   {
     id: 'shawarma',
-    category: 'pizza',
+    category: 'rolls',
     price: 70,
     name: {
       en: 'Shawarma',
@@ -432,7 +443,7 @@ export const MENU: MenuItem[] = [
   },
   {
     id: 'special-zinger',
-    category: 'pizza',
+    category: 'burgers',
     price: 200,
     name: {
       en: 'Special Zinger Burger',
@@ -447,7 +458,7 @@ export const MENU: MenuItem[] = [
   },
   {
     id: 'zinger',
-    category: 'crispy',
+    category: 'burgers',
     price: 120,
     name: {
       en: 'Zinger Burger',
@@ -826,5 +837,93 @@ export const MENU: MenuItem[] = [
       ps: 'د خپلې خوښې ایسکریم.',
     },
     image: SITE_IMAGES.menu['pineapple-ice'],
+  },
+  {
+    id: 'afghan-tikka-roll',
+    category: 'rolls',
+    price: null,
+    name: { en: 'Afghan Chicken Tikka Roll', ps: 'افغاني چکن تکه رول' },
+    description: {
+      en: 'Charcoal chicken, coriander chutney and onions in flatbread.',
+      ps: 'په ډوډۍ کې د سکرو چرګ، د ګشنیزو چټني او پیاز.',
+    },
+    image: SITE_IMAGES.menu['afghan-tikka-roll'],
+  },
+  {
+    id: 'beef-kabab-roll',
+    category: 'rolls',
+    price: null,
+    name: { en: 'Beef Kabab Roll', ps: 'د غوښې کباب رول' },
+    description: {
+      en: 'Beef seekh kebab, mint chutney and chopped tomatoes.',
+      ps: 'د غوا سیخ کباب، د نعناع چټني او میده رومیان.',
+    },
+    image: SITE_IMAGES.menu['beef-kabab-roll'],
+  },
+  {
+    id: 'spicy-chutney-roll',
+    category: 'rolls',
+    price: null,
+    name: { en: 'Spicy Chutney Roll', ps: 'د تندې چټنۍ رول' },
+    description: {
+      en: 'Grilled chicken with hot red pepper chutney.',
+      ps: 'ګریل شوی چرګ له تندې سرې چټنۍ سره.',
+    },
+    image: SITE_IMAGES.menu['spicy-chutney-roll'],
+  },
+  {
+    id: 'egg-potato-roll',
+    category: 'rolls',
+    price: null,
+    name: { en: 'Egg & Potato Roll', ps: 'د هګۍ او کچالو رول' },
+    description: {
+      en: 'Seasoned fried potatoes and boiled egg in soft flatbread.',
+      ps: 'په نرمه ډوډۍ کې خوندور سره شوي کچالو او اېشول شوې هګۍ.',
+    },
+    image: SITE_IMAGES.menu['egg-potato-roll'],
+  },
+  {
+    id: 'afghan-crispy-broast',
+    category: 'crispy',
+    price: null,
+    name: { en: 'Afghan Style Crispy Broast', ps: 'افغاني کرسپي بروست' },
+    description: {
+      en: 'Garlic and coriander chicken, green chutney and fries.',
+      ps: 'د هوږې او ګشنیزو چرګ، شنه چټني او سره کچالو.',
+    },
+    image: SITE_IMAGES.menu['afghan-crispy-broast'],
+  },
+  {
+    id: 'charcoal-wings',
+    category: 'crispy',
+    price: null,
+    name: { en: 'Charcoal Grilled Wings', ps: 'د سکرو وزرونه' },
+    description: {
+      en: 'Smoky chicken wings with saffron, lemon and garlic.',
+      ps: 'د سکرو وزرونه له زعفرانو، لیمو او هوږې سره.',
+    },
+    image: SITE_IMAGES.menu['charcoal-wings'],
+  },
+  {
+    id: 'spicy-fried-wings',
+    category: 'crispy',
+    price: null,
+    name: { en: 'Spicy Fried Wings', ps: 'تند سره شوي وزرونه' },
+    description: {
+      en: 'Crispy chicken wings with a spicy chili coating.',
+      ps: 'کرسپي وزرونه له تندو مرچو سره.',
+    },
+    image: SITE_IMAGES.menu['spicy-fried-wings'],
+  },
+  {
+    id: 'garlic-broast',
+    category: 'crispy',
+    price: null,
+    name: { en: 'Garlic Broast', ps: 'د هوږې بروست' },
+    description: {
+      en: 'Golden crispy chicken with aromatic garlic.',
+      ps: 'طلایي کرسپي چرګ له خوشبویه هوږې سره.',
+    },
+    image: SITE_IMAGES.menu['garlic-broast'],
   },
 ];

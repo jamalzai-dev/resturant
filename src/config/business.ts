@@ -16,6 +16,7 @@ export const BUSINESS = {
   map: {
     directionsUrl: null as string | null,
   },
+  reservations: { enabled: true, phone: null as string | null },
   cuisines: ['Pizza', 'Afghan', 'Grill'],
 };
 

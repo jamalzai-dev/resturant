@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import {
-  ArrowDown,
   ArrowRight,
   ArrowUpRight,
   Check,
@@ -25,88 +24,30 @@ import { Dialog } from './Dialog';
 import { Brand } from './Brand';
 import { ContactLink } from './ContactLink';
 import { MenuLink } from './MenuSection';
-import { useOrder } from './OrderContext';
+import { ReservationInquiry } from './ReservationInquiry';
 import { SECTIONS } from '../config/sections';
 import type { PizzaSize } from '../data/menu';
 
 export function Hero() {
-  const { t, money } = useLanguage();
-  const deliverySummary = interpolate(t.deliverySmall, {
-    nearby: money(deliveryStatus(0, 'nearby').minimum),
-    city: money(deliveryStatus(0, 'city').minimum),
-  });
+  const { t } = useLanguage();
   return (
-    <>
-      <section className="hero container" aria-labelledby="hero-title">
-        <div className="hero-copy">
-          <span className="eyebrow">
-            <span className="tiny-star">✳</span>
-            {t.heroEyebrow}
-          </span>
-          <h1 id="hero-title">
-            {t.heroTitle1}
-            <br />
-            {t.heroTitle2}
-            <br />
-            <em>{t.heroTitle3}</em>
-          </h1>
-          <p className="hero-description">{t.heroBody}</p>
-          <div className="hero-buttons">
-            <a className="button primary" href="#menu">
-              {t.explore}
-              <ArrowUpRight className="directional" size={18} />
-            </a>
-            <ContactLink className="button text-button">
-              <Phone size={16} />
-              {t.callToOrder}
-            </ContactLink>
-          </div>
-          <a className="hero-foot" href="#signature">
-            <span>
-              <ArrowDown size={17} />
-            </span>
-            {t.heroNote}
+    <section className="venue-hero" aria-labelledby="hero-title">
+      <Photo image={SITE_IMAGES.hero} priority className="venue-hero-photo" sizes="100vw" />
+      <div className="venue-hero-overlay" />
+      <div className="container venue-hero-content">
+        <span className="eyebrow">{t.heroEyebrow}</span>
+        <h1 id="hero-title">{t.venueHeadline}</h1>
+        <p>{t.venueDescription}</p>
+        <div className="hero-buttons">
+          <a href="#menu" className="button primary">
+            {t.viewMenu}
+            <ArrowUpRight className="directional" size={18} />
           </a>
-        </div>
-        <div className="hero-visual">
-          <Photo
-            image={SITE_IMAGES.hero}
-            priority
-            className="hero-photo"
-            sizes="(max-width: 760px) 100vw, 52vw"
-          />
-          <div className="hero-image-caption">
-            <span>{SITE_IMAGES.hero.preview ? t.heroImageNote : t.heroImageNoteReal}</span>
-          </div>
-        </div>
-      </section>
-      <CategoryPreviews />
-      <div className="hospitality-strip">
-        <div className="container">
-          <div>
-            <UsersRound />
-            <span>
-              <strong>{t.dineIn}</strong>
-              <small>{t.dineInSmall}</small>
-            </span>
-          </div>
-          <div>
-            <Truck />
-            <span>
-              <strong>{t.deliveryStrip}</strong>
-              <small>{deliverySummary}</small>
-            </span>
-          </div>
-          <div>
-            <Phone />
-            <span>
-              <strong>{t.phoneStrip}</strong>
-              <small>{t.phoneSmall}</small>
-            </span>
-          </div>
+          <ReservationInquiry />
         </div>
       </div>
-    </>
+      {SITE_IMAGES.hero.preview && <span className="venue-hero-note">{t.venueStockNote}</span>}
+    </section>
   );
 }
 
@@ -216,7 +157,7 @@ export function FamilyPlatter() {
   const [selected, setSelected] = useState(platters[0].id);
   const platter = platters.find((item) => item.id === selected)!;
   return (
-    <section className="platter-section">
+    <section id="signature" className="platter-section">
       <div className="container platter-grid">
         <div className="platter-visual">
           <Photo key={platter.id} image={platter.image} sizes="(max-width: 760px) 100vw, 55vw" />
@@ -290,6 +231,10 @@ export function JuiceBar() {
         </span>
         <h2>{t.juiceTitle}</h2>
         <p>{t.juiceBody}</p>
+        <MenuLink category="juice" className="text-link refreshment-link">
+          {t.viewJuices}
+          <ArrowUpRight className="directional" size={17} />
+        </MenuLink>
         <span className="juice-note">
           {interpolate(t.juiceNote, {
             juicePrice: money(
@@ -332,12 +277,20 @@ export function JuiceBar() {
         })}
       </div>
       <div className="dessert-feature">
-        <Photo image={SITE_IMAGES.desserts.iceCream} sizes="(max-width: 760px) 100vw, 40vw" />
+        <div className="dessert-photos">
+          {SECTIONS.dessertIds.map((id) => (
+            <Photo
+              key={id}
+              image={MENU.find((item) => item.id === id)!.image}
+              sizes="(max-width:760px) 30vw, 18vw"
+            />
+          ))}
+        </div>
         <div>
           <span className="eyebrow">{t.categories.dessert}</span>
           <h3>{t.dessertTitle}</h3>
           <p>{t.dessertBody}</p>
-          <MenuLink category="dessert" className="text-link">
+          <MenuLink category="dessert" className="text-link refreshment-link">
             {t.viewDesserts}
             <ArrowUpRight className="directional" size={17} />
           </MenuLink>
@@ -381,7 +334,6 @@ export function About() {
 }
 
 export function Contact() {
-  const { open } = useOrder();
   const { t, language, money } = useLanguage();
   const deliveryDescription = interpolate(t.deliveryBody, {
     nearby: money(deliveryStatus(0, 'nearby').minimum),
@@ -392,23 +344,6 @@ export function Contact() {
       <div className="section-heading centered">
         <span className="eyebrow">{t.contactEyebrow}</span>
         <h2>{t.contactTitle}</h2>
-      </div>
-      <div className="contact-promo">
-        <div>
-          <span className="eyebrow">{t.heroEyebrow}</span>
-          <h3>{t.aboutBody}</h3>
-          <div className="hero-buttons">
-            <a className="button primary" href="#menu">
-              {t.explore}
-              <ArrowUpRight size={18} />
-            </a>
-            <button className="button secondary" onClick={open}>
-              {t.order}
-              <ShoppingBag size={18} />
-            </button>
-          </div>
-        </div>
-        <Photo image={SITE_IMAGES.menu['special-zinger']} sizes="(max-width:760px) 90vw, 40vw" />
       </div>
       <div className="contact-grid">
         <div className="location-card">

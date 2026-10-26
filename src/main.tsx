@@ -5,6 +5,7 @@ import './fonts.css';
 import './styles.css';
 import './template.css';
 import './minimal.css';
+import './renewal.css';
 import { applyTheme } from './config/theme';
 
 applyTheme();

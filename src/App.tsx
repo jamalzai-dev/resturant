@@ -1,16 +1,6 @@
 import { useEffect } from 'react';
 import { Header } from './components/Header';
-import {
-  Hero,
-  AfghanEditorial,
-  Signature,
-  FamilyPlatter,
-  JuiceBar,
-  About,
-  Contact,
-  Footer,
-  PizzaShowcase,
-} from './components/HomeSections';
+import { Hero, CategoryPreviews, FamilyPlatter, JuiceBar, Contact, Footer } from './components/HomeSections';
 import { MenuSection } from './components/MenuSection';
 import { Gallery } from './components/Gallery';
 import { OrderProvider } from './components/OrderContext';
@@ -37,7 +27,7 @@ export default function App() {
         addressCountry: BUSINESS.countryCode,
       },
       servesCuisine: BUSINESS.cuisines,
-      acceptsReservations: false,
+      acceptsReservations: BUSINESS.reservations.enabled,
     });
     document.head.appendChild(script);
     return () => {
@@ -69,14 +59,11 @@ export default function App() {
           <Header />
           <main id="main">
             <Hero />
-            <Signature />
+            <CategoryPreviews />
             <MenuSection />
-            <PizzaShowcase />
-            <AfghanEditorial />
             <FamilyPlatter />
             <JuiceBar />
             <Gallery />
-            <About />
             <Contact />
           </main>
           <Footer />

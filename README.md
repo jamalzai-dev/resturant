@@ -23,7 +23,7 @@ Production files are in `dist/`, ready for static hosting. No API keys or enviro
 | `src/config/content.ts`            | Hero slogans and the short marketing copy in both languages                                                                 |
 | `src/config/theme.ts`              | Paper, cream, primary, hover, text, accent, border and feedback colors                                                      |
 | `src/config/sections.ts`           | Category shortcuts, editorial dishes, pizza showcase, juice selections, initial menu category and page size                 |
-| `src/data/menu.ts`                 | All 53 dishes, bilingual names/descriptions, AFN prices, three pizza sizes and platter contents                             |
+| `src/data/menu.ts`                 | All 61 dishes, bilingual names/descriptions, AFN prices, three pizza sizes and platter contents                             |
 | `src/config/siteImages.ts`         | Every food, interior, hero and gallery photograph, source sizes and bilingual alt text                                      |
 | `src/config/delivery.ts`           | Nearby/city delivery minimums; pickup has no minimum                                                                        |
 | `src/i18n/en.ts`, `src/i18n/ps.ts` | Interface text, category names, service-zone labels, dialogs and messages                                                   |
@@ -46,7 +46,7 @@ In live mode, a configured `internationalPhone` enables `tel:` links, and `map.d
 
 ## Menu and sample pricing
 
-Seven categories contain 53 items, including 11 pizzas. Pizza is selected initially. Search checks English and Pashto names/descriptions across all categories. Progressive “show more” keeps the initial page compact while making every dish accessible.
+Nine categories contain 61 items, including 11 pizzas. Pizza is selected initially. Search checks English and Pashto names/descriptions across all categories. Progressive “show more” keeps the initial page compact while making every dish accessible.
 
 All explicitly supplied prices are retained. The following pizza prices were selected for this **demo**:
 
@@ -66,13 +66,13 @@ Platter prices are 400 / 700 / 1,300 / 1,500 AFN for 2 / 4 / 6 / 8 people. Each 
 
 Place optimized WebP/AVIF files under `public/images/`, preferably with 640px and 1440px variants. In `src/config/siteImages.ts`, update **both** `src` and `srcSet`, plus both alt texts and the optional crop `position`. Set `preview: false` only for real client photography. Gallery/hero/about preview labels follow that flag. No redesign is necessary.
 
-All 53 menu items have distinct, individually generated food illustrations under `public/images/menu/`, with 640px and 1440px WebP variants. The site identifies these as AI-generated demo imagery. Pizza toppings, rice dishes, kebab styles, fruit drinks, ice-cream flavors and four mixed platters are matched to their menu records. Category views use image cards; all-dishes/search views remain compact.
+All 61 menu items have distinct, individually generated food illustrations under `public/images/menu/`, with 640px and 1440px WebP variants. The site identifies these as AI-generated demo imagery. Pizza toppings, rice dishes, kebab styles, fruit drinks, ice-cream flavors and four mixed platters are matched to their menu records. Category views use image cards; all-dishes/search views remain compact.
 
-`SITE_IMAGES.menu` is the single source for menu images. Featured dishes, the hero, juice showcase and gallery reuse the corresponding dish record. The platter showcase and its dialog use the selected platter's image. When replacing a photograph, update its dimensions and bilingual alt text as well as both image URLs.
+`SITE_IMAGES.menu` is the single source for menu images. Food showcases reuse the corresponding dish record. The hero and gallery reference the separate `SITE_IMAGES.venue` collection. The platter showcase and its dialog use the selected platter's image. When replacing a photograph, update its dimensions and bilingual alt text as well as both image URLs.
 
-Exact generation prompts and provenance are saved in `docs/menu-image-provenance.json`. Original PNGs remain locally in `reference-assets/menu-generated/`; the ZIP includes optimized website assets and provenance, not large source PNGs. `node scripts/verify-menu-images.mjs` checks all 106 responsive files, dimensions and duplicate-image hashes.
+Exact generation prompts and provenance are saved in `docs/menu-image-provenance.json` (original 53) and `docs/menu-expansion-provenance.json` (eight additions). Original PNGs remain locally in `reference-assets/menu-generated/`; the ZIP includes optimized website assets and provenance, not large source PNGs. `node scripts/verify-menu-images.mjs` checks all responsive menu and gallery files, dimensions and duplicate-image hashes.
 
-The original stock dining-room image remains a neutral placeholder. Previous client originals remain in local `images/` and `reference-assets/`; those folders are not served or included in the reusable ZIP. Earlier stock food assets remain in `public/images/` and `public/images/demo/` as unused alternatives. `npm run assets:demo` restores only those earlier stock alternatives, not the current generated menu images.
+The hero and gallery now use seven real stock venue photographs, clearly labeled as demo imagery. Photographer credits and license links are in `PHOTO_CREDITS_VENUE.md`; exact source URLs are in `docs/venue-photo-provenance.json`. The previous dining-room image remains an unused alternative. Previous client originals remain in local `images/` and `reference-assets/`; those folders are not served or included in the reusable ZIP. Earlier stock food assets remain in `public/images/` and `public/images/demo/` as unused alternatives. `npm run assets:demo` restores only those earlier stock alternatives, not the current generated menu images.
 
 The small pizza SVG is a placeholder brand mark. Replace `BUSINESS.logo` and `BUSINESS.favicon` with the client's supplied artwork. The image is displayed with preserved proportions; the adjacent wordmark follows the configured name and language.
 
@@ -105,4 +105,14 @@ The ZIP excludes dependencies, generated builds, test artifacts and previous-cli
 
 The current design uses warm cream and sand surfaces, charcoal typography, and saffron actions. `src/minimal.css` is the final `redesign` cascade layer, loaded after the existing structural styles. It controls the new hero composition, rounded category shortcuts, editorial food cards, menu, platters, gallery, contact feature, drawer and dark footer without changing ordering logic. Colors remain in `src/config/theme.ts`; the legacy `green` variable maps to charcoal text, while `primary` is the saffron action color. Locally served DM Sans and Vazirmatn provide matching bold English/Pashto headings.
 
-Homepage dish selections and category shortcuts are editable in `src/config/sections.ts`. New section copy lives in `src/config/content.ts`. All 53 menu records and 106 responsive image files remain unchanged. The hero reuses the existing pizza photograph with a circular CSS crop; no new food assets or original PNGs are required.
+Homepage dish selections and category shortcuts are editable in `src/config/sections.ts`. New section copy lives in `src/config/content.ts`. The original 53 menu records retain their IDs, prices and 106 image files. Eight additional unpriced dishes have new images. `src/renewal.css` adds the venue hero, nine-category navigation, venue gallery and expanded desserts while keeping the minimal visual system.
+
+## Venue and menu renewal
+
+The landing page follows: venue hero → four category shortcuts → unified menu → family platters → juices and three ice-cream photographs → venue gallery → contact → footer. Older editorial components remain available in source but are not rendered on the homepage.
+
+The menu categories are pizzas (11), traditional Afghan dishes (6), kebabs (5), rolls (6), burgers (2), wings/broast (6), platters (4), juices (12), and ice creams (9). All previous item IDs, prices and pizza sizes are preserved. The eight new rolls and wings/broast dishes have `price: null`: they display **Ask for Price**, open the contact inquiry, and cannot enter cart totals. Confirm prices before enabling them for orders.
+
+`BUSINESS.reservations.enabled` controls the Book a Table button. `BUSINESS.reservations.phone` optionally sets a dedicated reservation number, otherwise the international restaurant number is used. A callable number is exposed only in live mode (`demo: false`). The dialog is an inquiry guide, not a form submission or booking confirmation. No reservation details are collected or stored. Confirm reservations verbally with the restaurant.
+
+Venue filters are defined in `VENUE_FILTERS` in `src/config/siteImages.ts`, with labels in both translations. New venue images should have their own local paths, dimensions, bilingual alt text and appropriate preview flag. Run `node scripts/verify-menu-images.mjs` after menu/gallery edits; it reads the actual menu and configuration dynamically, validates responsive sizes and unique dish hashes, and rejects food-image paths in the venue gallery.

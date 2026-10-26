@@ -1,0 +1,74 @@
+[
+  {
+    "id": "afghan-tikka-roll",
+    "prompt": "Use case: photorealistic-natural. Asset type: individual restaurant menu photograph for Pizza Max demo. Subject: Afghan Chicken Tikka Roll. Two halves of a flatbread wrap revealing chunky charcoal-grilled chicken cubes, mild Afghan spices, fresh coriander chutney and sliced onions. Visible char on chicken, not shredded chicken. Premium realistic editorial food photography, landscape 1536x1024, three-quarter overhead angle, full plate centered with comfortable crop margins on warm cream limestone table. Soft natural window light, subtle shadows, appetizing natural textures, understated ivory crockery. One dish only. No text, no lettering, no watermarks, no collage, no people. Match a clean warm beige restaurant menu collection.",
+    "originalPath": "reference-assets/menu-generated/afghan-tikka-roll.png",
+    "src": "/images/menu/afghan-tikka-roll-1440.webp",
+    "generated": true,
+    "created": "2026-10-26",
+    "method": "Built-in OpenAI image generation"
+  },
+  {
+    "id": "beef-kabab-roll",
+    "prompt": "Use case: photorealistic-natural. Asset type: individual restaurant menu photograph for Pizza Max demo. Subject: Beef Kabab Roll. Soft flatbread wrap cut in half showing a whole cylindrical minced beef seekh kebab, mint chutney and chopped tomato. A few fresh mint leaves beside the plate. Premium realistic editorial food photography, landscape 1536x1024, three-quarter overhead angle, full plate centered with comfortable crop margins on warm cream limestone table. Soft natural window light, subtle shadows, appetizing natural textures, understated ivory crockery. One dish only. No text, no lettering, no watermarks, no collage, no people. Match a clean warm beige restaurant menu collection.",
+    "originalPath": "reference-assets/menu-generated/beef-kabab-roll.png",
+    "src": "/images/menu/beef-kabab-roll-1440.webp",
+    "generated": true,
+    "created": "2026-10-26",
+    "method": "Built-in OpenAI image generation"
+  },
+  {
+    "id": "spicy-chutney-roll",
+    "prompt": "Use case: photorealistic-natural. Asset type: individual restaurant menu photograph for Pizza Max demo. Subject: Spicy Chutney Roll. Two cut halves of thin grilled flatbread wrapped around grilled chicken with generous bright red hot tangy pepper chutney, a small red chutney bowl beside it. Show the red sauce clearly. Premium realistic editorial food photography, landscape 1536x1024, three-quarter overhead angle, full plate centered with comfortable crop margins on warm cream limestone table. Soft natural window light, subtle shadows, appetizing natural textures, understated ivory crockery. One dish only. No text, no lettering, no watermarks, no collage, no people. Match a clean warm beige restaurant menu collection.",
+    "originalPath": "reference-assets/menu-generated/spicy-chutney-roll.png",
+    "src": "/images/menu/spicy-chutney-roll-1440.webp",
+    "generated": true,
+    "created": "2026-10-26",
+    "method": "Built-in OpenAI image generation"
+  },
+  {
+    "id": "egg-potato-roll",
+    "prompt": "Use case: photorealistic-natural. Asset type: individual restaurant menu photograph for Pizza Max demo. Subject: Egg & Potato Roll. Soft flatbread roll cut diagonally showing seasoned golden fried potato cubes, sliced hard-boiled egg with yellow yolks, light herbs. No meat. Premium realistic editorial food photography, landscape 1536x1024, three-quarter overhead angle, full plate centered with comfortable crop margins on warm cream limestone table. Soft natural window light, subtle shadows, appetizing natural textures, understated ivory crockery. One dish only. No text, no lettering, no watermarks, no collage, no people. Match a clean warm beige restaurant menu collection.",
+    "originalPath": "reference-assets/menu-generated/egg-potato-roll.png",
+    "src": "/images/menu/egg-potato-roll-1440.webp",
+    "generated": true,
+    "created": "2026-10-26",
+    "method": "Built-in OpenAI image generation"
+  },
+  {
+    "id": "afghan-crispy-broast",
+    "prompt": "Use case: photorealistic-natural. Asset type: individual restaurant menu photograph for Pizza Max demo. Subject: Afghan Style Crispy Broast. Golden crisp bone-in fried chicken pieces marinated with garlic, coriander and mild Afghan spices, fries and a small bowl of green coriander chutney on an ivory plate. Premium realistic editorial food photography, landscape 1536x1024, three-quarter overhead angle, full plate centered with comfortable crop margins on warm cream limestone table. Soft natural window light, subtle shadows, appetizing natural textures, understated ivory crockery. One dish only. No text, no lettering, no watermarks, no collage, no people. Match a clean warm beige restaurant menu collection.",
+    "originalPath": "reference-assets/menu-generated/afghan-crispy-broast.png",
+    "src": "/images/menu/afghan-crispy-broast-1440.webp",
+    "generated": true,
+    "created": "2026-10-26",
+    "method": "Built-in OpenAI image generation"
+  },
+  {
+    "id": "charcoal-wings",
+    "prompt": "Use case: photorealistic-natural. Asset type: individual restaurant menu photograph for Pizza Max demo. Subject: Charcoal Grilled Wings. Six smoky grilled chicken wings with natural dark charcoal grill marks, light saffron lemon garlic glaze, lemon wedge and garlic cloves. Not breaded or fried. Premium realistic editorial food photography, landscape 1536x1024, three-quarter overhead angle, full plate centered with comfortable crop margins on warm cream limestone table. Soft natural window light, subtle shadows, appetizing natural textures, understated ivory crockery. One dish only. No text, no lettering, no watermarks, no collage, no people. Match a clean warm beige restaurant menu collection.",
+    "originalPath": "reference-assets/menu-generated/charcoal-wings.png",
+    "src": "/images/menu/charcoal-wings-1440.webp",
+    "generated": true,
+    "created": "2026-10-26",
+    "method": "Built-in OpenAI image generation"
+  },
+  {
+    "id": "spicy-fried-wings",
+    "prompt": "Use case: photorealistic-natural. Asset type: individual restaurant menu photograph for Pizza Max demo. Subject: Spicy Fried Wings. Six crunchy golden-red breaded fried chicken wings dusted in dry spicy chili seasoning. Crisp craggy coating and small red chili garnish. Not sticky barbecue sauce. Premium realistic editorial food photography, landscape 1536x1024, three-quarter overhead angle, full plate centered with comfortable crop margins on warm cream limestone table. Soft natural window light, subtle shadows, appetizing natural textures, understated ivory crockery. One dish only. No text, no lettering, no watermarks, no collage, no people. Match a clean warm beige restaurant menu collection.",
+    "originalPath": "reference-assets/menu-generated/spicy-fried-wings.png",
+    "src": "/images/menu/spicy-fried-wings-1440.webp",
+    "generated": true,
+    "created": "2026-10-26",
+    "method": "Built-in OpenAI image generation"
+  },
+  {
+    "id": "garlic-broast",
+    "prompt": "Use case: photorealistic-natural. Asset type: individual restaurant menu photograph for Pizza Max demo. Subject: Garlic Broast. Crisp golden bone-in fried chicken pieces with roasted garlic cloves, parsley and a small garlic sauce bowl on ivory ceramic plate. Aromatic garlic prominently visible. Premium realistic editorial food photography, landscape 1536x1024, three-quarter overhead angle, full plate centered with comfortable crop margins on warm cream limestone table. Soft natural window light, subtle shadows, appetizing natural textures, understated ivory crockery. One dish only. No text, no lettering, no watermarks, no collage, no people. Match a clean warm beige restaurant menu collection.",
+    "originalPath": "reference-assets/menu-generated/garlic-broast.png",
+    "src": "/images/menu/garlic-broast-1440.webp",
+    "generated": true,
+    "created": "2026-10-26",
+    "method": "Built-in OpenAI image generation"
+  }
+]

@@ -28,7 +28,13 @@ async function audit(language, view) {
 for (const language of ['en', 'ps']) {
   if (language === 'ps') await page.getByRole('button', { name: 'Switch to Pashto' }).click();
   await audit(language, 'page');
-  await page.locator('.signature-card').first().getByRole('button').click();
+  await page.locator('.reservation-button').click();
+  await audit(language, 'reservation');
+  await page.keyboard.press('Escape');
+  await page.locator('.gallery-tile').first().click();
+  await audit(language, 'gallery');
+  await page.keyboard.press('Escape');
+  if (language === 'en') await page.locator('.platter-actions .add-button').click();
   await page.locator('.order-button').click();
   await audit(language, 'cart');
   await page.locator('input[value="pickup"]').check();

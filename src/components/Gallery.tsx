@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { ArrowLeft, ArrowRight, ArrowUpRight, Expand } from 'lucide-react';
-import { SITE_IMAGES } from '../config/siteImages';
+import { SITE_IMAGES, VENUE_FILTERS } from '../config/siteImages';
 import { interpolate, useLanguage } from '../i18n/LanguageContext';
 import { Dialog } from './Dialog';
 import { Photo } from './Photo';
 
-type Filter = 'all' | 'interiors' | 'dishes' | 'juices';
+const FILTERS = VENUE_FILTERS;
+type Filter = (typeof FILTERS)[number];
 export function Gallery() {
   const { t, language, number } = useLanguage();
   const [filter, setFilter] = useState<Filter>('all');
@@ -30,7 +31,7 @@ export function Gallery() {
       </div>
       {hasPreviews && <p className="gallery-note">{hasRealPhotos ? t.galleryMixedNote : t.galleryNote}</p>}
       <div className="filter-list gallery-filters" role="group" aria-label={t.nav.gallery}>
-        {(['all', 'interiors', 'dishes', 'juices'] as Filter[]).map((value) => (
+        {FILTERS.map((value) => (
           <button
             key={value}
             onClick={() => setFilter(value)}
@@ -41,7 +42,7 @@ export function Gallery() {
           </button>
         ))}
       </div>
-      <div className={`gallery-grid ${filter !== 'all' ? 'filtered' : ''}`} key={filter}>
+      <div className={`gallery-grid venue-gallery-grid ${filter !== 'all' ? 'filtered' : ''}`} key={filter}>
         {photos.map((photo) => (
           <button
             key={photo.id}
@@ -49,12 +50,7 @@ export function Gallery() {
             onClick={() => setSelected(photo.id)}
             aria-label={`${t.viewImage}: ${photo.image.alt[language]}`}
           >
-            <Photo
-              image={photo.image}
-              sizes={
-                photo.id === 'dining' ? '(max-width: 950px) 100vw, 50vw' : '(max-width: 950px) 50vw, 25vw'
-              }
-            />
+            <Photo image={photo.image} sizes={'(max-width: 760px) 100vw, 50vw'} />
             <span className={`gallery-provenance ${photo.image.preview ? '' : 'is-real'}`}>
               {photo.image.preview ? t.galleryPreview : t.galleryReal}
             </span>

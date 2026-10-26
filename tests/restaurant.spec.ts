@@ -1,3 +1,4 @@
+import { MENU } from '../src/data/menu';
 import { test, expect } from '@playwright/test';
 
 test('pizza sizes, delivery minimums, ticket copy/download, pickup and persistence', async ({
@@ -62,19 +63,21 @@ test('pizza sizes, delivery minimums, ticket copy/download, pickup and persisten
   expect(errors).toEqual([]);
 });
 
-test('all 53 dishes are browsable, search is bilingual, and feature links select categories', async ({
+test('all menu dishes are browsable, search is bilingual, and feature links select categories', async ({
   page,
 }) => {
   await page.goto('/');
   for (const [category, count] of [
-    ['Pizza & burgers', 14],
-    ['Rice & traditional', 6],
-    ['Kebabs & wings', 6],
-    ['Broast & burger', 2],
-    ['Platters', 4],
-    ['Fresh juices', 12],
-    ['Ice cream', 9],
-    ['All dishes', 53],
+    ['Your Pizza. Your Size.', 11],
+    ['Traditional Afghan Foods', 6],
+    ['Kebabs', 5],
+    ['Rolls', 6],
+    ['Burgers', 2],
+    ['Wings & Broast', 6],
+    ['Family Platters', 4],
+    ['Fresh Juices', 12],
+    ['Ice Creams', 9],
+    ['All Items', MENU.length],
   ] as const) {
     await page.locator('.menu-filters').getByRole('button', { name: category, exact: true }).click();
     while (await page.getByRole('button', { name: 'Show more dishes' }).isVisible())
@@ -87,9 +90,9 @@ test('all 53 dishes are browsable, search is bilingual, and feature links select
   await page.getByRole('textbox', { name: 'Search the menu' }).fill('no-such-dish');
   await expect(page.getByText('No dishes found.', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Clear search' }).click();
-  await page.getByRole('link', { name: 'Explore ice cream' }).click();
+  await page.getByRole('link', { name: 'Explore Ice Creams' }).click();
   await expect(
-    page.locator('.menu-filters').getByRole('button', { name: 'Ice cream', exact: true }),
+    page.locator('.menu-filters').getByRole('button', { name: 'Ice Creams', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('[data-dish="vanilla"] .dish-price')).toHaveText('70 AFN');
   await page
@@ -100,14 +103,12 @@ test('all 53 dishes are browsable, search is bilingual, and feature links select
   await expect(page.getByTestId('subtotal')).toHaveText('70 AFN');
 });
 
-test('pizza showcase, priced platters, gallery and keyboard controls', async ({ page }) => {
+test('pizza sizes, priced platters, venue gallery and keyboard controls', async ({ page }) => {
   await page.goto('/');
-  const showcase = page.locator('.pizza-showcase');
-  await showcase.getByRole('button', { name: 'Cheese Pizza', exact: true }).click();
-  await expect(showcase.locator('.pizza-showcase-action > strong')).toHaveText('280 AFN');
-  await showcase.getByRole('radio', { name: 'Large', exact: true }).check();
-  await expect(showcase.locator('.pizza-showcase-action > strong')).toHaveText('450 AFN');
-  await showcase.getByRole('button', { name: /Add to order/ }).click();
+  const pizza = page.locator('[data-dish="cheese-pizza"]');
+  await pizza.getByRole('radio', { name: 'Large', exact: true }).check();
+  await expect(pizza.locator('.dish-price')).toHaveText('450 AFN');
+  await pizza.getByRole('button', { name: /Add to order/ }).click();
   await page
     .locator('.platter-options')
     .getByRole('button', { name: /4-Person/ })
@@ -123,7 +124,18 @@ test('pizza showcase, priced platters, gallery and keyboard controls', async ({ 
   await page.locator('.order-button').click();
   await expect(page.getByTestId('subtotal')).toHaveText('1,150 AFN');
   await page.keyboard.press('Escape');
-  await page.getByRole('button', { name: 'Juice bar', exact: true }).click();
+  for (const [category, count] of [
+    ['All', 7],
+    ['Exterior', 2],
+    ['Interior', 1],
+    ['Dining Hall', 2],
+    ['Kitchen', 1],
+    ['Experience', 1],
+  ] as const) {
+    await page.locator('.gallery-filters').getByRole('button', { name: category, exact: true }).click();
+    await expect(page.locator('.gallery-tile')).toHaveCount(count);
+  }
+  await page.getByRole('button', { name: 'Exterior', exact: true }).click();
   await expect(page.locator('.gallery-tile')).toHaveCount(2);
   const tile = page.locator('.gallery-tile').first();
   await tile.click();
@@ -143,7 +155,7 @@ test('Pashto mobile navigation, order ticket and persistence', async ({ page }) 
   await page.goto('/');
   await page.getByRole('button', { name: 'Switch to Pashto' }).click();
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
-  await expect(page.locator('h1')).toContainText('تازه خواړه.');
+  await expect(page.locator('h1')).toContainText('ښه خواړه.');
   await page.getByRole('button', { name: 'لارښود پرانیستل', exact: true }).click();
   await page.locator('#mobile-navigation').getByRole('link', { name: 'مېنو', exact: true }).click();
   await expect(page.locator('#mobile-navigation')).toHaveCount(0);
@@ -178,7 +190,7 @@ test('responsive LTR/RTL layouts, safe demo contact, images and metadata', async
   await page.getByRole('button', { name: 'View location', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('sample location');
   await page.keyboard.press('Escape');
-  await page.locator('.hero').getByRole('button', { name: 'Order by phone', exact: true }).click();
+  await page.locator('.contact-phone-link').click();
   await expect(page.getByRole('dialog')).toContainText('Phone calls are turned off');
   await page.keyboard.press('Escape');
   for (const language of ['en', 'ps']) {
@@ -228,7 +240,8 @@ test('broken image, invalid persisted order, and clipboard fallback remain usabl
     });
   });
   await page.goto('/');
-  await expect(page.locator('.hero-photo')).toHaveClass(/photo-fallback/);
+  await page.locator('[data-dish="special-pizza"]').scrollIntoViewIfNeeded();
+  await expect(page.locator('[data-dish="special-pizza"] .photo')).toHaveClass(/photo-fallback/);
   await page.locator('.order-button').click();
   await expect(page.getByRole('heading', { name: 'Your order is empty.' })).toBeVisible();
   await page.keyboard.press('Escape');
@@ -246,16 +259,16 @@ test('broken image, invalid persisted order, and clipboard fallback remain usabl
   );
 });
 
-test('all 53 dishes have distinct responsive images and platter previews track selection', async ({
+test('all menu dishes have distinct responsive images and platter previews track selection', async ({
   page,
 }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'All dishes', exact: true }).click();
+  await page.getByRole('button', { name: 'All Items', exact: true }).click();
   while (await page.getByRole('button', { name: 'Show more dishes' }).isVisible()) {
     await page.getByRole('button', { name: 'Show more dishes' }).click();
   }
   const images = page.locator('.menu-card .photo img');
-  await expect(images).toHaveCount(53);
+  await expect(images).toHaveCount(MENU.length);
   const records = await page.locator('.menu-card').evaluateAll((cards) =>
     cards.map((card) => {
       const img = card.querySelector('img')!;
@@ -267,7 +280,7 @@ test('all 53 dishes have distinct responsive images and platter previews track s
       };
     }),
   );
-  expect(new Set(records.map((record) => record.src)).size).toBe(53);
+  expect(new Set(records.map((record) => record.src)).size).toBe(MENU.length);
   for (const record of records) {
     expect(record.src).toBe(`/images/menu/${record.id}-1440.webp`);
     expect(record.srcset).toContain(`${record.id}-640.webp 640w`);
@@ -282,7 +295,7 @@ test('all 53 dishes have distinct responsive images and platter previews track s
       }),
     );
   });
-  await expect(page.locator('.menu-card .photo.is-loaded')).toHaveCount(53);
+  await expect(page.locator('.menu-card .photo.is-loaded')).toHaveCount(MENU.length);
   for (const people of [2, 4, 6, 8]) {
     await page
       .locator('.platter-options')
@@ -301,38 +314,63 @@ test('all 53 dishes have distinct responsive images and platter previews track s
     await expect(page.locator('.platter-dialog')).toContainText('salad');
     await page.keyboard.press('Escape');
   }
-  await expect(page.locator('.signature-card').first().locator('img')).toHaveAttribute(
-    'src',
-    '/images/menu/special-pizza-1440.webp',
-  );
-  await expect(
-    page
-      .locator('.gallery-tile')
-      .filter({ has: page.locator('img[src="/images/menu/afghani-kebab-1440.webp"]') }),
-  ).toHaveCount(1);
+  await expect(page.locator('.gallery-tile img[src*="/images/menu/"]')).toHaveCount(0);
+  await expect(page.locator('.gallery-tile')).toHaveCount(7);
 });
 
-test('redesigned category shortcuts, specials navigation and editorial ordering', async ({ page }) => {
+test('category shortcuts, refreshment links, reservation inquiry and unpriced dishes', async ({ page }) => {
   await page.goto('/');
-  const shortcuts = page.locator('.category-previews a');
   for (const [index, category] of [
-    'Pizza & burgers',
-    'Rice & traditional',
-    'Broast & burger',
-    'Fresh juices',
+    'Your Pizza. Your Size.',
+    'Traditional Afghan Foods',
+    'Kebabs',
+    'Burgers',
   ].entries()) {
-    await shortcuts.nth(index).click();
+    await page.locator('.category-previews a').nth(index).click();
     await expect(
       page.locator('.menu-filters').getByRole('button', { name: category, exact: true }),
     ).toHaveAttribute('aria-pressed', 'true');
   }
-  await page.locator('.desktop-nav').getByRole('link', { name: 'Our specials' }).click();
-  await expect(page).toHaveURL(/#signature$/);
-  await page.locator('.editorial-card').filter({ hasText: 'Rosh / Meat Dish' }).getByRole('button').click();
-  await page.locator('.contact-promo').getByRole('button', { name: 'Your order', exact: true }).click();
-  await expect(page.getByTestId('subtotal')).toHaveText('250 AFN');
-  await expect(page.locator('.order-line')).toContainText('Rosh / Meat Dish');
+  await page.getByRole('link', { name: 'Explore Juices', exact: true }).click();
+  await expect(
+    page.locator('.menu-filters').getByRole('button', { name: 'Fresh Juices', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: 'Book a Table', exact: true }).click();
+  await expect(page.locator('.reservation-dialog')).toContainText('Nothing is submitted');
+  await expect(page.locator('.reservation-dialog a[href^="tel:"]')).toHaveCount(0);
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('button', { name: 'Book a Table', exact: true })).toBeFocused();
+  for (const item of MENU.filter((item) => item.price === null)) {
+    await page.getByRole('textbox', { name: 'Search the menu' }).fill(item.name.en);
+    const card = page.locator(`[data-dish="${item.id}"]`);
+    await expect(card.locator('.dish-price')).toHaveCount(0);
+    await card.getByRole('button', { name: /Ask for price/i }).click();
+    await expect(page.locator('.contact-demo-dialog')).toBeVisible();
+    await page.keyboard.press('Escape');
+  }
+  await page.locator('.order-button').click();
+  await expect(page.getByRole('heading', { name: 'Your order is empty.' })).toBeVisible();
   await page.keyboard.press('Escape');
   await page.locator('.language-button').click();
-  await expect(page.locator('.afghan-editorial h2')).toContainText('افغاني خواړه');
+  await page.locator('.reservation-button').click();
+  await expect(page.locator('.reservation-dialog')).toContainText('هېڅ غوښتنه نه لېږل کېږي');
+});
+
+test('live customization enables call-to-reserve without submitting a booking', async ({ page }) => {
+  await page.route('**/src/config/business.ts', async (route) => {
+    const response = await route.fetch();
+    const body = (await response.text())
+      .replace('demo: true', 'demo: false')
+      .replace('internationalPhone: null', 'internationalPhone: "+12025550123"');
+    await route.fulfill({ response, body });
+  });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Book a Table', exact: true }).click();
+  await expect(
+    page.locator('.reservation-dialog').getByRole('link', { name: 'Call to reserve' }),
+  ).toHaveAttribute('href', 'tel:+12025550123');
+  await expect(page.locator('.reservation-dialog')).toContainText(
+    'only reserved after the restaurant confirms',
+  );
+  await expect(page.locator('.reservation-dialog form')).toHaveCount(0);
 });

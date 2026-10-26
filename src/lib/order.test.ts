@@ -15,20 +15,31 @@ import { MENU } from '../data/menu';
 
 describe('phone order calculations', () => {
   it('keeps the complete demo menu and all pizza sizes orderable', () => {
-    expect(MENU).toHaveLength(53);
-    expect(new Set(MENU.map((item) => item.id)).size).toBe(53);
+    expect(MENU).toHaveLength(61);
+    expect(new Set(MENU.map((item) => item.id)).size).toBe(MENU.length);
     expect(MENU.filter((item) => item.sizes)).toHaveLength(11);
     for (const item of MENU) {
       if (item.sizes)
         for (const size of ['small', 'medium', 'large'] as const)
           expect(orderSubtotal(addLine([], item.id, size))).toBe(item.sizes[size]);
-      else expect(orderSubtotal(addLine([], item.id))).toBe(item.price);
+      else expect(orderSubtotal(addLine([], item.id))).toBe(item.price ?? 0);
     }
     expect(MENU.filter((item) => item.category === 'platter').map((item) => item.price)).toEqual([
       400, 700, 1300, 1500,
     ]);
     expect(MENU.filter((item) => item.category === 'juice')).toHaveLength(12);
     expect(MENU.filter((item) => item.category === 'dessert')).toHaveLength(9);
+  });
+  it('separates the nine categories and rejects all eight unpriced additions', () => {
+    expect(MENU.filter((item) => item.category === 'pizza').every((item) => !!item.sizes)).toBe(true);
+    expect(MENU.filter((item) => item.category === 'pizza')).toHaveLength(11);
+    expect(MENU.filter((item) => item.category === 'kebab')).toHaveLength(5);
+    expect(MENU.filter((item) => item.category === 'rolls')).toHaveLength(6);
+    expect(MENU.filter((item) => item.category === 'burgers')).toHaveLength(2);
+    expect(MENU.filter((item) => item.category === 'crispy')).toHaveLength(6);
+    const unpriced = MENU.filter((item) => item.price === null);
+    expect(unpriced).toHaveLength(8);
+    for (const item of unpriced) expect(addLine([], item.id)).toEqual([]);
   });
   it('rejects items whose price is cleared during customization', () => {
     const item = MENU.find((item) => item.id === 'mango')!;
