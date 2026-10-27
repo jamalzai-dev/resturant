@@ -33,7 +33,7 @@ export function Hero() {
   return (
     <section className="venue-hero" aria-labelledby="hero-title">
       <Photo image={SITE_IMAGES.hero} priority className="venue-hero-photo" sizes="100vw" />
-      <div className="venue-hero-overlay" />
+      <div className="venue-hero-overlay" aria-hidden="true" />
       <div className="container venue-hero-content">
         <span className="eyebrow">{t.heroEyebrow}</span>
         <h1 id="hero-title">{t.venueHeadline}</h1>
@@ -464,7 +464,7 @@ export function CategoryPreviews() {
         const dish = MENU.find((item) => item.id === id)!;
         return (
           <MenuLink key={category} category={category} className="category-preview">
-            <Photo image={dish.image} sizes="(max-width:760px) 42vw, 20vw" />
+            <Photo image={dish.image} sizes="(max-width:760px) 46vw, (max-width:1240px) 23vw, 290px" />
             <span>
               <strong>{t.categories[category]}</strong>
               <ArrowUpRight className="directional" size={20} />

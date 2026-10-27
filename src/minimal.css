@@ -1,8 +1,8 @@
-/* Visual skin: warm minimalism. Functional layout and behavior stay in styles.css. */
+/* Shared warm visual skin. Layer order: base, components, responsive, redesign, renewal. */
 @layer redesign {
   :root {
     --serif: 'DM Sans', sans-serif;
-    --radius: 28px;
+    --radius: 20px;
   }
   h1,
   h2 {
@@ -21,12 +21,12 @@
     max-width: 1240px;
   }
   .section-space {
-    padding-block: 90px;
+    padding-block: 88px;
   }
   .eyebrow {
     color: var(--muted);
     letter-spacing: 0.13em;
-    font-size: 10px;
+    font-size: 12px;
   }
   .topbar {
     background: var(--cream);
@@ -43,7 +43,59 @@
     box-shadow: none;
   }
   .header-inner {
-    height: 96px;
+    height: 88px;
+    gap: 24px;
+  }
+  .header .original-logo {
+    width: 56px;
+    height: 56px;
+  }
+  .header .brand {
+    gap: 12px;
+  }
+  .desktop-nav {
+    gap: 24px;
+    margin-inline-start: 0;
+  }
+  .desktop-nav a {
+    min-height: 44px;
+    display: grid;
+    align-items: center;
+  }
+  .desktop-nav a[aria-current]::after {
+    width: 100%;
+    height: 2px;
+  }
+  .header-actions {
+    gap: 20px;
+  }
+  .header .language-button,
+  .header .order-button,
+  .header .mobile-toggle {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  .language-button [lang='en'] {
+    font-family: 'DM Sans', sans-serif;
+  }
+  .header .order-button:hover {
+    background: var(--primary);
+    color: var(--ink);
+  }
+  .mobile-nav a {
+    min-height: 52px;
+    padding-block: 16px;
+  }
+  .mobile-nav a[aria-current] {
+    color: var(--accent);
+    background: var(--soft);
+  }
+  .mobile-nav {
+    max-height: calc(100dvh - 80px);
+    overflow-y: auto;
+  }
+  .mobile-nav .mobile-phone {
+    min-height: 44px;
   }
   .brand,
   .wordmark,
@@ -63,6 +115,8 @@
   }
   .language-button {
     border: 0;
+    font-size: 13px;
+    padding-inline: 4px;
   }
   .order-button {
     background: var(--ink);
@@ -334,7 +388,8 @@
   .size-selector label {
     border: 0;
     border-radius: 25px;
-    min-height: 34px;
+    min-height: 44px;
+    font-size: 12px;
     display: grid;
     place-items: center;
   }
@@ -348,8 +403,8 @@
     color: var(--ink);
   }
   .quantity-control button {
-    min-width: 36px;
-    min-height: 40px;
+    min-width: 44px;
+    min-height: 44px;
   }
   .menu-list .menu-photo-wrap .photo {
     border-radius: 16px;
@@ -681,7 +736,7 @@
     border-radius: 16px;
   }
   .order-line .quantity-control {
-    height: 40px;
+    height: auto;
   }
   .menu-more {
     display: flex;
@@ -697,7 +752,52 @@
   .gallery-provenance {
     color: var(--ink);
   }
+  @media (max-width: 1150px) {
+    .desktop-nav,
+    .header-actions {
+      gap: 20px;
+    }
+    .header .brand:has(.original-logo) .wordmark > span {
+      font-size: 27px;
+    }
+  }
   @media (max-width: 950px) {
+    .section-space {
+      padding-block: 72px;
+    }
+    .header-inner {
+      height: 80px;
+    }
+    .desktop-nav {
+      display: none;
+    }
+    .mobile-toggle {
+      display: grid;
+      place-items: center;
+    }
+    .mobile-nav {
+      display: flex;
+      flex-direction: column;
+      padding: 12px 24px 24px;
+      border-top: 1px solid var(--line);
+    }
+    .mobile-nav > a {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .mobile-nav > a > svg:last-child {
+      margin-inline-start: auto;
+    }
+    .mobile-nav .nav-number {
+      font-size: 11px;
+      color: var(--accent);
+    }
+    .header .order-button > span {
+      display: inline;
+    }
     .hero {
       gap: 28px;
       padding-block: 50px 70px;
@@ -903,6 +1003,34 @@
     }
   }
   @media (max-width: 480px) {
+    .header-inner {
+      gap: 8px;
+      height: 76px;
+    }
+    .header .brand {
+      gap: 8px;
+    }
+    .header .brand:has(.original-logo) .wordmark > span {
+      font-size: 22px;
+    }
+    .header-actions {
+      gap: 4px;
+    }
+    .header .order-button > span {
+      display: none;
+    }
+    .header .language-button {
+      font-size: 12px;
+    }
+    .header .mobile-toggle {
+      width: 44px;
+    }
+    .header .order-button {
+      gap: 5px;
+    }
+    .header .brand:has(.original-logo) .wordmark small {
+      letter-spacing: 1.2px;
+    }
     .hero h1 {
       font-size: 52px;
     }
@@ -973,6 +1101,14 @@
     }
     .order-drawer {
       border-radius: 0;
+    }
+  }
+  @media (max-width: 360px) {
+    .header .brand:has(.original-logo) .wordmark {
+      display: none;
+    }
+    .header-actions {
+      gap: 8px;
     }
   }
   @media (prefers-reduced-motion: reduce) {

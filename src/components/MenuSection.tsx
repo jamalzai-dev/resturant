@@ -35,7 +35,7 @@ export function AddButton({
     return (
       <ContactLink className="ask-price">
         <span>{t.askPrice}</span>
-        <ArrowUpRight size={16} />
+        <ArrowUpRight className="directional" size={16} />
       </ContactLink>
     );
   if (quantity && !compact)
@@ -70,7 +70,7 @@ export function AddButton({
   );
 }
 
-export function MenuCard({ item }: { item: MenuItem }) {
+export function MenuCard({ item, compact = false }: { item: MenuItem; compact?: boolean }) {
   const { t, language, money } = useLanguage();
   const [size, setSize] = useState<PizzaSize>('small');
   const price = item.sizes ? item.sizes[size] : item.price;
@@ -78,7 +78,14 @@ export function MenuCard({ item }: { item: MenuItem }) {
     <article className={`menu-card ${!item.image ? 'menu-card-no-photo' : ''}`} data-dish={item.id}>
       {item.image ? (
         <div className="menu-photo-wrap">
-          <Photo image={item.image} />
+          <Photo
+            image={item.image}
+            sizes={
+              compact
+                ? '(max-width:480px) 64px, 88px'
+                : '(max-width:600px) 100vw, (max-width:950px) 46vw, (max-width:1240px) 30vw, 397px'
+            }
+          />
           {item.tag && <span className="dish-tag">{t.tags[item.tag]}</span>}
         </div>
       ) : (
@@ -146,7 +153,7 @@ export function MenuLink({
 }
 
 export function MenuSection() {
-  const { t, number } = useLanguage();
+  const { t, number, language } = useLanguage();
   const filtersRef = useRef<HTMLDivElement>(null);
   const [category, setCategory] = useState<Category>(SECTIONS.defaultCategory);
   const [query, setQuery] = useState('');
@@ -168,12 +175,23 @@ export function MenuSection() {
     const list = filtersRef.current;
     const active = list?.querySelector<HTMLElement>('[aria-pressed="true"]');
     if (!list || !active) return;
-    const offset = active.getBoundingClientRect().left - list.getBoundingClientRect().left;
-    list.scrollBy({
-      left: offset - (list.clientWidth - active.clientWidth) / 2,
-      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-    });
-  }, [category, query]);
+    const reveal = () => {
+      const offset = active.getBoundingClientRect().left - list.getBoundingClientRect().left;
+      list.scrollBy({
+        left: offset - (list.clientWidth - active.clientWidth) / 2,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+      });
+    };
+    // Direction and font metrics can change without changing the selected category.
+    const frame = requestAnimationFrame(reveal);
+    const observer = new ResizeObserver(reveal);
+    observer.observe(list);
+    observer.observe(active);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [category, query, language]);
   const term = query.trim().toLocaleLowerCase();
   const filtered = MENU.filter((item) =>
     term
@@ -225,7 +243,7 @@ export function MenuSection() {
         </p>
         <div className={`menu-grid ${category === 'all' || term ? 'menu-list' : ''}`} key={category}>
           {visible.map((item) => (
-            <MenuCard key={item.id} item={item} />
+            <MenuCard key={item.id} item={item} compact={category === 'all' || !!term} />
           ))}
         </div>
         {!filtered.length && (

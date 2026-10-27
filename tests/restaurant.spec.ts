@@ -1,4 +1,5 @@
 import { MENU } from '../src/data/menu';
+import { en } from '../src/i18n/en';
 import { test, expect } from '@playwright/test';
 
 test('pizza sizes, delivery minimums, ticket copy/download, pickup and persistence', async ({
@@ -68,7 +69,7 @@ test('all menu dishes are browsable, search is bilingual, and feature links sele
 }) => {
   await page.goto('/');
   for (const [category, count] of [
-    ['Your Pizza. Your Size.', 11],
+    [en.categories.pizza, 11],
     ['Traditional Afghan Foods', 6],
     ['Kebabs', 5],
     ['Rolls', 6],
@@ -321,7 +322,7 @@ test('all menu dishes have distinct responsive images and platter previews track
 test('category shortcuts, refreshment links, reservation inquiry and unpriced dishes', async ({ page }) => {
   await page.goto('/');
   for (const [index, category] of [
-    'Your Pizza. Your Size.',
+    en.categories.pizza,
     'Traditional Afghan Foods',
     'Kebabs',
     'Burgers',
@@ -373,4 +374,92 @@ test('live customization enables call-to-reserve without submitting a booking', 
     'only reserved after the restaurant confirms',
   );
   await expect(page.locator('.reservation-dialog form')).toHaveCount(0);
+});
+
+test('mobile navigation dismisses with Escape and closes at the desktop breakpoint', async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 1000 });
+  await page.goto('/');
+  const toggle = page.locator('.mobile-toggle');
+  await toggle.click();
+  await expect(page.locator('#mobile-navigation')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(toggle).toBeFocused();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await toggle.click();
+  await page.locator('#mobile-navigation a').first().focus();
+  await page.keyboard.press('Escape');
+  await expect(toggle).toBeFocused();
+  await toggle.click();
+  await page.locator('#mobile-navigation a').first().focus();
+  await page.setViewportSize({ width: 1024, height: 1000 });
+  await expect(page.locator('#mobile-navigation')).toHaveCount(0);
+  await expect(page.locator('.desktop-nav a[aria-current]')).toBeFocused();
+});
+
+test('selected filter stays visible after language and viewport changes', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Explore Ice Creams' }).click();
+  for (const language of ['en', 'ps']) {
+    if (language === 'ps') await page.locator('.language-button').click();
+    for (const width of [390, 320, 768]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await expect
+        .poll(() =>
+          page.locator('.menu-filters').evaluate((list) => {
+            const active = list.querySelector('[aria-pressed="true"]')!.getBoundingClientRect();
+            const bounds = list.getBoundingClientRect();
+            return active.left >= bounds.left - 1 && active.right <= bounds.right + 1;
+          }),
+        )
+        .toBe(true);
+    }
+  }
+});
+
+test('menu prices, quantity controls and compact results fit in both directions', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.locator('[data-dish="special-pizza"] .add-button').click();
+  for (const language of ['en', 'ps']) {
+    if (language === 'ps') await page.locator('.language-button').click();
+    for (const width of [1440, 1024, 768, 390, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      for (const compact of [false, true]) {
+        await page
+          .locator('.menu-filters button')
+          .nth(compact ? 0 : 1)
+          .click();
+        await expect(page.locator('.menu-grid')).toHaveClass(compact ? /menu-list/ : /^menu-grid $/);
+        const problems = await page.locator('.menu-card').evaluateAll((cards) =>
+          cards.flatMap((card) => {
+            const bounds = card.getBoundingClientRect();
+            const price = card.querySelector('.dish-price')?.getBoundingClientRect();
+            const action = card.querySelector('.quantity-control, .add-button')?.getBoundingClientRect();
+            const errors: string[] = [];
+            const id = card.getAttribute('data-dish');
+            for (const target of card.querySelectorAll('.dish-price, button, .size-selector label')) {
+              const rect = target.getBoundingClientRect();
+              if (rect.left < bounds.left - 1 || rect.right > bounds.right + 1)
+                errors.push(`${id}: clipped control`);
+              if (target.matches('button, label') && rect.height < 44) errors.push(`${id}: small target`);
+            }
+            if (
+              price &&
+              action &&
+              price.top < action.bottom &&
+              action.top < price.bottom &&
+              price.left < action.right &&
+              action.left < price.right
+            )
+              errors.push(`${id}: overlapping price`);
+            return errors;
+          }),
+        );
+        expect(problems, `${language} / ${width} / compact=${compact}`).toEqual([]);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      }
+    }
+  }
 });
