@@ -67,25 +67,15 @@ test('pizza sizes, delivery minimums, ticket copy/download, pickup and persisten
 test('all menu dishes are browsable, search is bilingual, and feature links select categories', async ({
   page,
 }) => {
-  await page.goto('/#/menu?category=pizza');
-  for (const [category, count] of [
-    [en.categories.pizza, 11],
-    ['Traditional Afghan Foods', 6],
-    ['Kebabs', 5],
-    ['Rolls', 6],
-    ['Burgers', 2],
-    ['Wings & Broast', 6],
-    ['Family Platters', 4],
-    ['Fresh Juices', 12],
-    ['Ice Creams', 9],
-    ['All Items', MENU.length],
-  ] as const) {
-    await page.locator('.menu-filters').getByRole('button', { name: category, exact: true }).click();
-    await expect(page.locator('.menu-filters').getByRole('button', { name: category, exact: true })).toHaveAttribute('aria-pressed', 'true');
-    while (await page.getByRole('button', { name: 'Show more dishes' }).isVisible())
-      await page.getByRole('button', { name: 'Show more dishes' }).click();
+  for (const [category, count] of [['pizza',11],['rice',6],['kebab',5],['rolls',6],['burgers',2],['crispy',6],['platter',4],['juice',12],['dessert',9]] as const) {
+    await page.goto('/#/menu?category=' + category);
+    await expect(page.getByRole('tab', {selected:true})).toHaveText(category === 'juice' ? 'Juices' : category === 'dessert' ? 'Ice Cream' : 'Foods');
+    await expect(page.locator('.menu-card')).toHaveCount(Math.min(count,9));
+    while (await page.getByRole('button', { name: 'Show more dishes' }).isVisible()) await page.getByRole('button', { name: 'Show more dishes' }).click();
     await expect(page.locator('.menu-card')).toHaveCount(count);
   }
+  await page.getByRole('tab', {name:'Juices',exact:true}).click();
+  await expect(page.getByRole('tab',{name:'Juices',exact:true})).toHaveAttribute('aria-selected','true');
   await page.getByRole('textbox', { name: 'Search the menu' }).fill('مالټه');
   await expect(page.locator('.menu-card')).toHaveCount(1);
   await expect(page.locator('.menu-card')).toContainText('Orange / Malta Juice');
@@ -93,9 +83,7 @@ test('all menu dishes are browsable, search is bilingual, and feature links sele
   await expect(page.getByText('No dishes found.', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Clear search' }).click();
   await page.getByRole('link', { name: 'Explore Ice Creams' }).click();
-  await expect(
-    page.locator('.menu-filters').getByRole('button', { name: 'Ice Creams', exact: true }),
-  ).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('tab', {name:'Ice Cream',exact:true})).toHaveAttribute('aria-selected','true');
   await expect(page.locator('[data-dish="vanilla"] .dish-price')).toHaveText('70 AFN');
   await page
     .locator('[data-dish="vanilla"]')
@@ -248,6 +236,7 @@ test('broken image, invalid persisted order, and clipboard fallback remain usabl
   await page.locator('.order-button').click();
   await expect(page.getByRole('heading', { name: 'Your order is empty.' })).toBeVisible();
   await page.keyboard.press('Escape');
+  await page.getByRole('button', {name:'All Foods',exact:true}).click();
   await page.getByRole('textbox', { name: 'Search the menu' }).fill('shawarma');
   await page
     .locator('[data-dish="shawarma"]')
@@ -265,40 +254,26 @@ test('broken image, invalid persisted order, and clipboard fallback remain usabl
 test('all menu dishes have distinct responsive images and platter previews track selection', async ({
   page,
 }) => {
-  await page.goto('/#/menu?category=pizza');
-  await page.getByRole('button', { name: 'All Items', exact: true }).click();
-  while (await page.getByRole('button', { name: 'Show more dishes' }).isVisible()) {
-    await page.getByRole('button', { name: 'Show more dishes' }).click();
-  }
-  const images = page.locator('.menu-card .photo img');
-  await expect(images).toHaveCount(MENU.length);
-  const records = await page.locator('.menu-card').evaluateAll((cards) =>
-    cards.map((card) => {
+  const sources = new Set<string>();
+  for (const [section,count] of [['foods',40],['juices',12],['ice-cream',9]] as const) {
+    await page.goto('/#/menu?section=' + section);
+    await expect(page.locator('.menu-card')).toHaveCount(9);
+    while (await page.getByRole('button',{name:'Show more dishes'}).isVisible()) await page.getByRole('button',{name:'Show more dishes'}).click();
+    await expect(page.locator('.menu-card')).toHaveCount(count);
+    const records = await page.locator('.menu-card').evaluateAll(cards => cards.map(card => {
       const img = card.querySelector('img')!;
-      return {
-        id: card.getAttribute('data-dish'),
-        src: img.getAttribute('src'),
-        srcset: img.srcset,
-        loading: img.loading,
-      };
-    }),
-  );
-  expect(new Set(records.map((record) => record.src)).size).toBe(MENU.length);
-  for (const record of records) {
-    expect(record.src).toBe(`/images/menu/${record.id}-1440.webp`);
-    expect(record.srcset).toContain(`${record.id}-640.webp 640w`);
-    expect(record.loading).toBe('lazy');
+      return {id:card.getAttribute('data-dish'),src:img.getAttribute('src'),srcset:img.srcset,loading:img.loading};
+    }));
+    for (const record of records) {
+      expect(record.src).toBe(`/images/menu/${record.id}-1440.webp`);
+      expect(record.srcset).toContain(`${record.id}-640.webp 640w`);
+      expect(record.loading).toBe('lazy'); sources.add(record.src!);
+    }
+    await page.locator('.menu-card img').evaluateAll(async elements => { await Promise.all(elements.map(async image => { const img = image as HTMLImageElement; img.loading='eager'; await img.decode(); })); });
+    await expect(page.locator('.menu-card .photo.is-loaded')).toHaveCount(count);
   }
-  await images.evaluateAll(async (elements) => {
-    await Promise.all(
-      elements.map(async (image) => {
-        const img = image as HTMLImageElement;
-        img.loading = 'eager';
-        await img.decode();
-      }),
-    );
-  });
-  await expect(page.locator('.menu-card .photo.is-loaded')).toHaveCount(MENU.length);
+  expect(sources.size).toBe(MENU.length);
+  await page.goto('/#/menu');
   for (const people of [2, 4, 6, 8]) {
     await page
       .locator('.platter-options')
@@ -324,22 +299,11 @@ test('all menu dishes have distinct responsive images and platter previews track
 
 test('category shortcuts, refreshment links, reservation inquiry and unpriced dishes', async ({ page }) => {
   await page.goto('/');
-  for (const [index, category] of [
-    en.categories.pizza,
-    'Traditional Afghan Foods',
-    'Kebabs',
-    'Burgers',
-  ].entries()) {
+  for (const [index, category] of ['Foods','Drinks','Juices','Ice Cream'].entries()) {
     await page.goto('/');
     await page.locator('.category-previews a').nth(index).click();
-    await expect(
-      page.locator('.menu-filters').getByRole('button', { name: category, exact: true }),
-    ).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.getByRole('tab',{name:category,exact:true})).toHaveAttribute('aria-selected','true');
   }
-  await page.getByRole('link', { name: 'Explore Juices', exact: true }).click();
-  await expect(
-    page.locator('.menu-filters').getByRole('button', { name: 'Fresh Juices', exact: true }),
-  ).toHaveAttribute('aria-pressed', 'true');
   await page.goto('/');
   await page.getByRole('button', { name: 'Book a Table', exact: true }).click();
   await expect(page.locator('.reservation-dialog')).toContainText('Nothing is submitted');
@@ -407,15 +371,15 @@ test('selected filter stays visible after language and viewport changes', async 
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/#/menu?category=pizza');
-  await page.getByRole('link', { name: 'Explore Ice Creams' }).click();
+  await page.getByRole('tab', { name: 'Ice Cream', exact:true }).click();
   for (const language of ['en', 'ps']) {
     if (language === 'ps') await page.locator('.language-button').click();
     for (const width of [390, 320, 768]) {
       await page.setViewportSize({ width, height: 1000 });
       await expect
         .poll(() =>
-          page.locator('.menu-filters').evaluate((list) => {
-            const active = list.querySelector('[aria-pressed="true"]')!.getBoundingClientRect();
+          page.locator('.menu-tabs').evaluate((list) => {
+            const active = list.querySelector('[aria-selected="true"]')!.getBoundingClientRect();
             const bounds = list.getBoundingClientRect();
             return active.left >= bounds.left - 1 && active.right <= bounds.right + 1;
           }),
@@ -434,10 +398,7 @@ test('menu prices, quantity controls and compact results fit in both directions'
     for (const width of [1440, 1024, 768, 390, 320]) {
       await page.setViewportSize({ width, height: 1000 });
       for (const compact of [false, true]) {
-        await page
-          .locator('.menu-filters button')
-          .nth(compact ? 0 : 1)
-          .click();
+        await page.getByRole('textbox').fill(compact ? 'pizza' : '');
         await expect(page.locator('.menu-grid')).toHaveClass(compact ? /menu-list/ : /^menu-grid $/);
         const problems = await page.locator('.menu-card').evaluateAll((cards) =>
           cards.flatMap((card) => {

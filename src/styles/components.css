@@ -263,3 +263,15 @@
   .home-cta h2 { white-space: pre-line; margin-block: 16px 20px; }
   .home-cta p { max-width: 470px; }
 }
+
+@layer components {
+  .menu-tabs { width: fit-content; max-width: 100%; margin: 0 auto 32px; border-bottom: 1px solid var(--border-subtle); gap: 12px; }
+  .menu-tabs button { font-size: 16px; padding: 14px 28px; }
+  .menu-filters { margin-bottom: 8px; }
+  .legacy-category { display: flex; align-items: center; gap: 24px; font-size: 14px; }
+  .legacy-category > span { color: var(--accent-primary); }
+  .collection-note,.demo-menu-note { font-size: 13px; margin-block: 16px; }
+  .demo-menu-note { padding: 20px 24px; border: 1px solid var(--border-subtle); border-radius: 16px; background: var(--accent-soft); }
+  .demo-drink-card .eyebrow { margin-bottom: 12px; color: var(--accent-primary); }
+  .demo-drink-card .dish-line-icon { background: radial-gradient(ellipse at center,var(--accent-soft),var(--bg-elevated)); }
+}

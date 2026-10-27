@@ -1,3 +1,9 @@
+import { useSearchParams } from 'react-router-dom';
 import { MenuSection } from '../components/MenuSection';
 import { FamilyPlatter, JuiceBar } from '../components/HomeSections';
-export function MenuPage() { return <><MenuSection /><FamilyPlatter /><JuiceBar /></>; }
+import { menuScope } from '../config/menuTaxonomy';
+export function MenuPage() {
+  const [params] = useSearchParams();
+  const { section } = menuScope(params);
+  return <><MenuSection />{section === 'foods' && <FamilyPlatter />}{section === 'juices' && <JuiceBar />}</>;
+}
