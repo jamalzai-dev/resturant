@@ -22,7 +22,7 @@ export function Gallery() {
       <div className="section-heading heading-split">
         <div>
           <span className="eyebrow">{t.galleryEyebrow}</span>
-          <h2>{t.galleryTitle}</h2>
+          <h1>{t.galleryTitle}</h1>
         </div>
         <span className="outlined-label">
           {hasRealPhotos ? t.galleryReal : t.galleryPreview}

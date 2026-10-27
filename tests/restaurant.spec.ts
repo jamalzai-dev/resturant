@@ -9,7 +9,7 @@ test('pizza sizes, delivery minimums, ticket copy/download, pickup and persisten
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-  await page.goto('/');
+  await page.goto('/#/menu?category=pizza');
   await page.locator('.order-button').click();
   await expect(page.getByRole('heading', { name: 'Your order is empty.' })).toBeVisible();
   await page.getByRole('link', { name: 'Browse the menu' }).click();
@@ -67,7 +67,7 @@ test('pizza sizes, delivery minimums, ticket copy/download, pickup and persisten
 test('all menu dishes are browsable, search is bilingual, and feature links select categories', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('/#/menu?category=pizza');
   for (const [category, count] of [
     [en.categories.pizza, 11],
     ['Traditional Afghan Foods', 6],
@@ -81,6 +81,7 @@ test('all menu dishes are browsable, search is bilingual, and feature links sele
     ['All Items', MENU.length],
   ] as const) {
     await page.locator('.menu-filters').getByRole('button', { name: category, exact: true }).click();
+    await expect(page.locator('.menu-filters').getByRole('button', { name: category, exact: true })).toHaveAttribute('aria-pressed', 'true');
     while (await page.getByRole('button', { name: 'Show more dishes' }).isVisible())
       await page.getByRole('button', { name: 'Show more dishes' }).click();
     await expect(page.locator('.menu-card')).toHaveCount(count);
@@ -105,7 +106,7 @@ test('all menu dishes are browsable, search is bilingual, and feature links sele
 });
 
 test('pizza sizes, priced platters, venue gallery and keyboard controls', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/#/menu?category=pizza');
   const pizza = page.locator('[data-dish="cheese-pizza"]');
   await pizza.getByRole('radio', { name: 'Large', exact: true }).check();
   await expect(pizza.locator('.dish-price')).toHaveText('450 AFN');
@@ -125,6 +126,7 @@ test('pizza sizes, priced platters, venue gallery and keyboard controls', async 
   await page.locator('.order-button').click();
   await expect(page.getByTestId('subtotal')).toHaveText('1,150 AFN');
   await page.keyboard.press('Escape');
+  await page.goto('/#/gallery');
   for (const [category, count] of [
     ['All', 7],
     ['Exterior', 2],
@@ -184,7 +186,7 @@ test('responsive LTR/RTL layouts, safe demo contact, images and metadata', async
     if (r.status() >= 400) failed.push(r.url());
   });
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/');
+  await page.goto('/#/about');
   await expect(page.locator('a[href^="tel:"]')).toHaveCount(0);
   await expect(page.locator('a[href*="google.com/maps"]')).toHaveCount(0);
   await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(0);
@@ -240,7 +242,7 @@ test('broken image, invalid persisted order, and clipboard fallback remain usabl
       },
     });
   });
-  await page.goto('/');
+  await page.goto('/#/menu?category=pizza');
   await page.locator('[data-dish="special-pizza"]').scrollIntoViewIfNeeded();
   await expect(page.locator('[data-dish="special-pizza"] .photo')).toHaveClass(/photo-fallback/);
   await page.locator('.order-button').click();
@@ -263,7 +265,7 @@ test('broken image, invalid persisted order, and clipboard fallback remain usabl
 test('all menu dishes have distinct responsive images and platter previews track selection', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('/#/menu?category=pizza');
   await page.getByRole('button', { name: 'All Items', exact: true }).click();
   while (await page.getByRole('button', { name: 'Show more dishes' }).isVisible()) {
     await page.getByRole('button', { name: 'Show more dishes' }).click();
@@ -315,6 +317,7 @@ test('all menu dishes have distinct responsive images and platter previews track
     await expect(page.locator('.platter-dialog')).toContainText('salad');
     await page.keyboard.press('Escape');
   }
+  await page.goto('/#/gallery');
   await expect(page.locator('.gallery-tile img[src*="/images/menu/"]')).toHaveCount(0);
   await expect(page.locator('.gallery-tile')).toHaveCount(7);
 });
@@ -327,6 +330,7 @@ test('category shortcuts, refreshment links, reservation inquiry and unpriced di
     'Kebabs',
     'Burgers',
   ].entries()) {
+    await page.goto('/');
     await page.locator('.category-previews a').nth(index).click();
     await expect(
       page.locator('.menu-filters').getByRole('button', { name: category, exact: true }),
@@ -336,11 +340,13 @@ test('category shortcuts, refreshment links, reservation inquiry and unpriced di
   await expect(
     page.locator('.menu-filters').getByRole('button', { name: 'Fresh Juices', exact: true }),
   ).toHaveAttribute('aria-pressed', 'true');
+  await page.goto('/');
   await page.getByRole('button', { name: 'Book a Table', exact: true }).click();
   await expect(page.locator('.reservation-dialog')).toContainText('Nothing is submitted');
   await expect(page.locator('.reservation-dialog a[href^="tel:"]')).toHaveCount(0);
   await page.keyboard.press('Escape');
   await expect(page.getByRole('button', { name: 'Book a Table', exact: true })).toBeFocused();
+  await page.goto('/#/menu');
   for (const item of MENU.filter((item) => item.price === null)) {
     await page.getByRole('textbox', { name: 'Search the menu' }).fill(item.name.en);
     const card = page.locator(`[data-dish="${item.id}"]`);
@@ -352,6 +358,7 @@ test('category shortcuts, refreshment links, reservation inquiry and unpriced di
   await page.locator('.order-button').click();
   await expect(page.getByRole('heading', { name: 'Your order is empty.' })).toBeVisible();
   await page.keyboard.press('Escape');
+  await page.goto('/');
   await page.locator('.language-button').click();
   await page.locator('.reservation-button').click();
   await expect(page.locator('.reservation-dialog')).toContainText('هېڅ غوښتنه نه لېږل کېږي');
@@ -399,7 +406,7 @@ test('mobile navigation dismisses with Escape and closes at the desktop breakpoi
 test('selected filter stays visible after language and viewport changes', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await page.goto('/#/menu?category=pizza');
   await page.getByRole('link', { name: 'Explore Ice Creams' }).click();
   for (const language of ['en', 'ps']) {
     if (language === 'ps') await page.locator('.language-button').click();
@@ -420,7 +427,7 @@ test('selected filter stays visible after language and viewport changes', async 
 
 test('menu prices, quantity controls and compact results fit in both directions', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/');
+  await page.goto('/#/menu?category=pizza');
   await page.locator('[data-dish="special-pizza"] .add-button').click();
   for (const language of ['en', 'ps']) {
     if (language === 'ps') await page.locator('.language-button').click();

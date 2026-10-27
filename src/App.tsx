@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
-import { Header } from './components/Header';
-import { Hero, CategoryPreviews, FamilyPlatter, JuiceBar, Contact, Footer } from './components/HomeSections';
-import { MenuSection } from './components/MenuSection';
-import { Gallery } from './components/Gallery';
-import { OrderProvider } from './components/OrderContext';
-import { OrderDrawer, StickyOrder } from './components/OrderDrawer';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LanguageProvider } from './i18n/LanguageContext';
+import { OrderProvider } from './components/OrderContext';
+import { SiteLayout } from './components/layout/SiteLayout';
+import { HomePage } from './pages/HomePage';
+import { MenuPage } from './pages/MenuPage';
+import { GalleryPage } from './pages/GalleryPage';
+import { AboutPage } from './pages/AboutPage';
+import { LEGACY_PATHS } from './routing/routes';
 import { BUSINESS } from './config/business';
-
 export default function App() {
   useEffect(() => {
     document.querySelector<HTMLLinkElement>('link[rel="icon"]')!.href = BUSINESS.favicon;
@@ -34,43 +35,10 @@ export default function App() {
       script.remove();
     };
   }, []);
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('section-arrival');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15 },
-    );
-    document
-      .querySelectorAll('.section-heading, .juice-intro, .about-copy, .platter-copy')
-      .forEach((element) => observer.observe(element));
-    return () => observer.disconnect();
-  }, []);
-  return (
-    <LanguageProvider>
-      <OrderProvider>
-        <div id="home">
-          <Header />
-          <main id="main">
-            <Hero />
-            <CategoryPreviews />
-            <MenuSection />
-            <FamilyPlatter />
-            <JuiceBar />
-            <Gallery />
-            <Contact />
-          </main>
-          <Footer />
-        </div>
-        <OrderDrawer />
-        <StickyOrder />
-      </OrderProvider>
-    </LanguageProvider>
-  );
+  return <HashRouter><LanguageProvider><OrderProvider><Routes><Route element={<SiteLayout />}>
+    <Route index element={<HomePage />} /><Route path="menu" element={<MenuPage />} />
+    <Route path="gallery" element={<GalleryPage />} /><Route path="about" element={<AboutPage />} />
+    {Object.entries(LEGACY_PATHS).filter(([key])=>!['menu','gallery','about'].includes(key)).map(([key,path])=><Route key={key} path={key} element={<Navigate to={path} replace />} />)}
+    <Route path="*" element={<Navigate to="/" replace />} />
+  </Route></Routes></OrderProvider></LanguageProvider></HashRouter>;
 }

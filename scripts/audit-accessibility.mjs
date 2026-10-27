@@ -27,13 +27,20 @@ async function audit(language, view) {
 }
 for (const language of ['en', 'ps']) {
   if (language === 'ps') await page.getByRole('button', { name: 'Switch to Pashto' }).click();
-  await audit(language, 'page');
+  await page.goto('http://127.0.0.1:5173/');
+  await audit(language, 'home');
   await page.locator('.reservation-button').click();
   await audit(language, 'reservation');
   await page.keyboard.press('Escape');
+  await page.goto('http://127.0.0.1:5173/#/gallery');
+  await audit(language, 'gallery-page');
   await page.locator('.gallery-tile').first().click();
   await audit(language, 'gallery');
   await page.keyboard.press('Escape');
+  await page.goto('http://127.0.0.1:5173/#/about');
+  await audit(language, 'about');
+  await page.goto('http://127.0.0.1:5173/#/menu');
+  await audit(language, 'menu');
   if (language === 'en') await page.locator('.platter-actions .add-button').click();
   await page.locator('.order-button').click();
   await audit(language, 'cart');

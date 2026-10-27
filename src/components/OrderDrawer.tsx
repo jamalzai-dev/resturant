@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {
   ArrowLeft,
@@ -91,10 +92,10 @@ export function OrderDrawer() {
               </div>
               <h3>{t.emptyTitle}</h3>
               <p>{t.emptyBody}</p>
-              <a className="button primary" href="#menu" onClick={close}>
+              <Link className="button primary" to="/menu" onClick={close}>
                 {t.backMenu}
                 <ArrowRight className="directional" size={17} />
-              </a>
+              </Link>
             </div>
           ) : (
             <>

@@ -25,4 +25,4 @@ export const phoneHref =
 export const directionsUrl = !BUSINESS.demo ? BUSINESS.map.directionsUrl : null;
 export const STORAGE_KEYS = { order: `${BUSINESS.id}:order:v1`, language: `${BUSINESS.id}:language` };
 
-export const NAVIGATION = ['home', 'menu', 'signature', 'gallery', 'contact'] as const;
+export const NAVIGATION = ['home', 'menu', 'gallery', 'about'] as const;

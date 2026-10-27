@@ -30,7 +30,7 @@ export const en = {
     home: 'Home',
     menu: 'Menu',
     gallery: 'Gallery',
-    about: 'About',
+    about: 'About Us',
     contact: 'Contact',
   },
   categories: {

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { BUSINESS } from '../config/business';
 import { useLanguage } from '../i18n/LanguageContext';
 
@@ -24,9 +25,9 @@ export function Brand({ linked = true }: { linked?: boolean }) {
     </>
   );
   return linked ? (
-    <a className="brand" href="#home" aria-label={BUSINESS.name[language]}>
+    <Link className="brand" to="/" aria-label={BUSINESS.name[language]}>
       {content}
-    </a>
+    </Link>
   ) : (
     <span className="brand">{content}</span>
   );

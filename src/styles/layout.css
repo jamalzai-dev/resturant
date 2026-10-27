@@ -1,0 +1,47 @@
+@layer layout {
+  .container { width: min(1240px, calc(100% - var(--page-gutter) * 2)); margin-inline: auto; }
+  .section-space { padding-block: var(--section-space); }
+  .section-heading { margin-bottom: 32px; }
+  .section-heading h1,.section-heading h2 { margin-top: 16px; }
+  .section-heading p { margin-top: 20px; max-width: 580px; }
+  .centered { text-align: center; }
+  .centered p { margin-inline: auto; }
+  .heading-split { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; }
+  .page-intro { text-align: center; padding-bottom: 48px; }
+  .page-intro h1 { margin-block: 20px; }
+  .page-intro p { max-width: 640px; margin-inline: auto; }
+  .topbar { border-bottom: 1px solid var(--border-subtle); font-size: 11px; color: var(--text-secondary); }
+  .topbar .container { min-height: 32px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .topbar a { display: flex; align-items: center; gap: 8px; }
+  .topbar b { color: var(--accent-primary); }
+  .header { position: sticky; top: 0; z-index: 30; background: var(--bg-main); border-bottom: 1px solid transparent; }
+  .header.scrolled { background: var(--bg-elevated); border-color: var(--border-subtle); }
+  .header-inner { height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .original-logo { width: 48px; height: 48px; object-fit: contain; }
+  .wordmark { display: flex; flex-direction: column; }
+  .wordmark > span { font-size: 25px; font-weight: 700; letter-spacing: -.7px; line-height: 1.2; }
+  .wordmark i { font-style: normal; color: var(--accent-primary); }
+  .wordmark small { font-size: 8px; letter-spacing: 2px; margin-top: 4px; color: var(--text-muted); }
+  .desktop-nav, .header-actions { display: flex; align-items: center; gap: 24px; }
+  .desktop-nav a { display: grid; align-items: center; min-height: 44px; font-size: 14px; color: var(--text-secondary); position: relative; }
+  .desktop-nav a:hover,.desktop-nav a[aria-current] { color: var(--text-primary); }
+  .desktop-nav a[aria-current]::after { content: ''; position: absolute; height: 2px; width: 20px; background: var(--accent-primary); bottom: 0; inset-inline-start: 0; border-radius: 2px; }
+  .header-actions { gap: 12px; }
+  .language-button,.order-button { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 12px; font-size: 13px; border-radius: 30px; }
+  .language-button { border: 1px solid var(--border-subtle); }
+  .order-button { background: var(--accent-primary); color: var(--on-accent); padding-inline: 18px; font-weight: 600; }
+  .order-button b { display: grid; place-items: center; min-width: 22px; height: 22px; border-radius: 50%; background: var(--on-accent); color: var(--accent-primary); font-size: 11px; }
+  .mobile-toggle,.mobile-nav { display: none; }
+  .footer { background: var(--bg-elevated); padding-block: 64px 28px; margin-top: 32px; border-top: 1px solid var(--border-subtle); }
+  .footer-main { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 48px; }
+  .footer-brand p { font-size: 17px; max-width: 260px; margin-top: 24px; white-space: pre-line; }
+  .footer-nav nav { display: grid; gap: 4px; margin-top: 16px; }
+  .footer-nav a,.footer-phone { display: flex; align-items: center; gap: 12px; min-height: 44px; width: fit-content; font-size: 14px; color: var(--text-secondary); }
+  .footer-address address { margin-top: 24px; font-size: 14px; color: var(--text-secondary); }
+  .footer a:hover,.footer button:hover { color: var(--accent-primary); }
+  .footer-demo-note { font-size: 12px; margin-block: 32px; padding: 16px; border: 1px solid var(--border-subtle); border-radius: 12px; }
+  .footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 20px; border-top: 1px solid var(--border-subtle); padding-top: 24px; font-size: 12px; color: var(--text-muted); }
+  .footer-bottom > span { display: flex; align-items: center; gap: 8px; }
+  .footer-bottom > a { min-width: 44px; min-height: 44px; display: grid; place-items: center; }
+}

@@ -1,3 +1,5 @@
+import { Link, useSearchParams } from 'react-router-dom';
+import { legacyCategory, menuHref } from '../routing/routes';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   ArrowUpRight,
@@ -142,35 +144,24 @@ export function MenuLink({
   children: ReactNode;
 }) {
   return (
-    <a
-      href="#menu"
-      className={className}
-      onClick={() => window.dispatchEvent(new CustomEvent('restaurant:menu', { detail: category }))}
-    >
+    <Link to={menuHref(category)} className={className}>
       {children}
-    </a>
+    </Link>
   );
 }
 
 export function MenuSection() {
   const { t, number, language } = useLanguage();
   const filtersRef = useRef<HTMLDivElement>(null);
-  const [category, setCategory] = useState<Category>(SECTIONS.defaultCategory);
+  const [params, setParams] = useSearchParams();
+  const category = legacyCategory(params);
   const [query, setQuery] = useState('');
   const [limit, setLimit] = useState(SECTIONS.menuPageSize);
   function select(value: Category) {
-    setCategory(value);
+    setParams(new URLSearchParams(menuHref(value).split("?")[1]));
     setQuery('');
     setLimit(SECTIONS.menuPageSize);
   }
-  useEffect(() => {
-    const handler = (event: Event) => {
-      const value = (event as CustomEvent<Category>).detail;
-      if (CATEGORIES.includes(value)) select(value);
-    };
-    window.addEventListener('restaurant:menu', handler);
-    return () => window.removeEventListener('restaurant:menu', handler);
-  }, []);
   useEffect(() => {
     const list = filtersRef.current;
     const active = list?.querySelector<HTMLElement>('[aria-pressed="true"]');
@@ -206,7 +197,7 @@ export function MenuSection() {
       <div className="container">
         <div className="section-heading centered">
           <span className="eyebrow">{t.menuEyebrow}</span>
-          <h2>{t.menuTitle}</h2>
+          <h1>{t.menuTitle}</h1>
           <p>{t.menuBody}</p>
         </div>
         <div className="menu-search">

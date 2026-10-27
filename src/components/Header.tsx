@@ -1,3 +1,5 @@
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { PAGE_PATHS } from '../routing/routes';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, Globe2, MapPin, Menu, Phone, ShoppingBag, X } from 'lucide-react';
 import { BUSINESS, NAVIGATION } from '../config/business';
@@ -11,15 +13,13 @@ export function Header() {
   const { count, open } = useOrder();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState<string>('home');
+  const { pathname } = useLocation();
+  useEffect(() => setMobileOpen(false), [pathname]);
   const toggleRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     const handler = () => {
       setScrolled(window.scrollY > 24);
-      const current = [...NAVIGATION]
-        .reverse()
-        .find((id) => (document.getElementById(id)?.getBoundingClientRect().top ?? Infinity) <= 140);
-      setActiveSection(current ?? 'home');
+
     };
     window.addEventListener('scroll', handler, { passive: true });
     handler();
@@ -35,8 +35,8 @@ export function Header() {
     const desktop = window.matchMedia('(min-width: 951px)');
     const closeOnDesktop = () => {
       if (desktop.matches) {
-        if (document.activeElement?.closest('#mobile-navigation')) {
-          document.querySelector<HTMLAnchorElement>('.desktop-nav a[aria-current]')?.focus();
+        if (!document.querySelector('dialog[open]')) {
+          requestAnimationFrame(() => document.querySelector<HTMLAnchorElement>('.desktop-nav a[aria-current]')?.focus());
         }
         setMobileOpen(false);
       }
@@ -50,7 +50,7 @@ export function Header() {
   }, [mobileOpen]);
   return (
     <>
-      <a className="skip-link" href="#main">
+      <a className="skip-link" href="#main" onClick={(event) => { event.preventDefault(); const main = document.getElementById("main"); main?.focus(); main?.scrollIntoView(); }}>
         {t.skip}
       </a>
       <div className="topbar">
@@ -64,11 +64,11 @@ export function Header() {
               BUSINESS.name[language]
             )}
           </span>
-          <a href="#contact">
+          <Link to="/about#contact">
             <MapPin size={12} />
             {BUSINESS.demo ? t.topLocation : BUSINESS.locality[language]}
             <ArrowUpRight className="directional" size={12} />
-          </a>
+          </Link>
         </div>
       </div>
       <header className={`header ${scrolled ? 'scrolled' : ''}`}>
@@ -76,9 +76,9 @@ export function Header() {
           <Brand />
           <nav className="desktop-nav" aria-label={t.openNav}>
             {NAVIGATION.map((key) => (
-              <a key={key} href={`#${key}`} aria-current={activeSection === key ? 'location' : undefined}>
+              <NavLink key={key} to={PAGE_PATHS[key]} end>
                 {t.nav[key]}
-              </a>
+              </NavLink>
             ))}
           </nav>
           <div className="header-actions">
@@ -106,10 +106,10 @@ export function Header() {
         {mobileOpen && (
           <nav id="mobile-navigation" className="mobile-nav" aria-label={t.openNav}>
             {NAVIGATION.map((key, index) => (
-              <a
+              <NavLink
                 key={key}
-                href={`#${key}`}
-                aria-current={activeSection === key ? 'location' : undefined}
+                to={PAGE_PATHS[key]}
+                end
                 onClick={() => setMobileOpen(false)}
               >
                 <span className="nav-number" aria-hidden="true">
@@ -117,7 +117,7 @@ export function Header() {
                 </span>
                 {t.nav[key]}
                 <ArrowUpRight className="directional" size={18} />
-              </a>
+              </NavLink>
             ))}
             <ContactLink className="mobile-phone">
               <Phone size={17} />

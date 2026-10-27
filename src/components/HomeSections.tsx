@@ -1,6 +1,6 @@
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import {
-  ArrowRight,
   ArrowUpRight,
   Check,
   Clock3,
@@ -8,12 +8,11 @@ import {
   MapPin,
   Phone,
   ShoppingBag,
-  Sparkles,
   Sun,
   Truck,
   UsersRound,
 } from 'lucide-react';
-import { BUSINESS, NAVIGATION } from '../config/business';
+import { BUSINESS } from '../config/business';
 import { deliveryStatus } from '../config/delivery';
 import { SITE_IMAGES } from '../config/siteImages';
 import { MENU } from '../data/menu';
@@ -21,7 +20,6 @@ import { interpolate, useLanguage } from '../i18n/LanguageContext';
 import { Photo } from './Photo';
 import { AddButton } from './MenuSection';
 import { Dialog } from './Dialog';
-import { Brand } from './Brand';
 import { ContactLink } from './ContactLink';
 import { MenuLink } from './MenuSection';
 import { ReservationInquiry } from './ReservationInquiry';
@@ -39,10 +37,10 @@ export function Hero() {
         <h1 id="hero-title">{t.venueHeadline}</h1>
         <p>{t.venueDescription}</p>
         <div className="hero-buttons">
-          <a href="#menu" className="button primary">
+          <Link to="/menu" className="button primary">
             {t.viewMenu}
             <ArrowUpRight className="directional" size={18} />
-          </a>
+          </Link>
           <ReservationInquiry />
         </div>
       </div>
@@ -61,10 +59,10 @@ export function Signature() {
           <span className="eyebrow">{t.signatureEyebrow}</span>
           <h2>{t.signatureTitle}</h2>
         </div>
-        <a className="text-link" href="#menu">
+        <Link className="text-link" to="/menu">
           {t.fullMenu}
           <ArrowUpRight className="directional" size={18} />
-        </a>
+        </Link>
       </div>
       <p className="section-intro">{t.signatureBody}</p>
       <div className="signature-grid">
@@ -323,10 +321,10 @@ export function About() {
             <UsersRound size={18} />
             {t.aboutFoot}
           </div>
-          <a className="text-link" href="#contact">
+          <Link className="text-link" to="/about#contact">
             {t.aboutLink}
             <ArrowUpRight className="directional" size={18} />
-          </a>
+          </Link>
         </div>
       </div>
     </section>
@@ -405,54 +403,6 @@ export function Contact() {
         </div>
       </div>
     </section>
-  );
-}
-
-export function Footer() {
-  const { t, language } = useLanguage();
-  return (
-    <footer className="footer">
-      <div className="container">
-        <div className="footer-main">
-          <div className="footer-brand">
-            <Brand />
-            <p>{t.footerMessage}</p>
-          </div>
-          <div className="footer-nav">
-            <span className="eyebrow">{t.footerExplore}</span>
-            <nav aria-label={t.footerExplore}>
-              {NAVIGATION.filter((item) => item !== 'home').map((key) => (
-                <a key={key} href={`#${key}`}>
-                  {t.nav[key]}
-                  <ArrowUpRight size={14} className="directional" />
-                </a>
-              ))}
-            </nav>
-          </div>
-          <div className="footer-address">
-            <span className="eyebrow">{t.footerVisit}</span>
-            <address>{BUSINESS.address[language]}</address>
-            <ContactLink className="footer-phone">
-              <bdi>{BUSINESS.phone ?? t.demoPhone}</bdi>
-              <ArrowUpRight size={15} className="directional" />
-            </ContactLink>
-          </div>
-        </div>
-        {BUSINESS.demo && <p className="footer-demo-note">{t.demoNotice}</p>}
-        <div className="footer-bottom">
-          <span>
-            © {new Date().getFullYear()} {t.footerRights}
-          </span>
-          <span>
-            <Sparkles size={14} />
-            {t.footerBottom}
-          </span>
-          <a href="#home" aria-label={t.nav.home}>
-            <ArrowRight size={19} style={{ transform: 'rotate(-90deg)' }} />
-          </a>
-        </div>
-      </div>
-    </footer>
   );
 }
 

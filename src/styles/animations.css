@@ -1,0 +1,10 @@
+@layer motion {
+  .button,.add-button,.icon-button,.order-button,.filter-list button,.text-link { transition: background 200ms var(--ease), color 200ms var(--ease), border-color 200ms var(--ease); }
+  .photo img { transition: transform 280ms var(--ease); }
+  .category-preview,.gallery-tile,.signature-card { transition: transform 240ms var(--ease), border-color 240ms var(--ease); }
+  @media (hover:hover) { .category-preview:hover,.gallery-tile:hover { transform: translateY(-3px); } .category-preview:hover img,.gallery-tile:hover img { transform: scale(1.025); } }
+  .dialog { animation: dialog-arrival 200ms var(--ease); }
+  .toast { transition: opacity 200ms var(--ease); }
+  @keyframes dialog-arrival { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }
+}

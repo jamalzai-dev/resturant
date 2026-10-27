@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useId, useState } from 'react';
 import { CalendarDays, Phone, ArrowUpRight } from 'lucide-react';
 import { BUSINESS } from '../config/business';
@@ -35,10 +36,10 @@ export function ReservationInquiry() {
           ) : (
             <p className="reservation-notice">{BUSINESS.demo ? t.reservationDemo : t.reservationPending}</p>
           )}
-          <a className="text-link" href="#menu" onClick={() => setOpen(false)}>
+          <Link className="text-link" to="/menu" onClick={() => setOpen(false)}>
             {t.viewMenu}
             <ArrowUpRight size={17} />
-          </a>
+          </Link>
         </Dialog>
       )}
     </>
