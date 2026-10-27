@@ -1,6 +1,8 @@
 import { BRAND_COPY } from '../config/content.ts';
+import { EXPERIENCE_COPY } from '../config/experienceCopy.ts';
 import type { Translation } from './en.ts';
 export const ps: Translation = {
+  ...EXPERIENCE_COPY.ps,
   ...BRAND_COPY.ps,
   galleryPreview: 'نمونوي / سټاک',
   galleryNote:
@@ -212,3 +214,4 @@ export const ps: Translation = {
   dessertTitle: 'یو خوږ انتخاب.',
   dessertBody: 'له ونیلا او چاکلیټ تر پستې او قلفې پورې.',
 };
+

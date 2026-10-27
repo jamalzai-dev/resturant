@@ -1,5 +1,7 @@
 import { BRAND_COPY } from '../config/content.ts';
+import { EXPERIENCE_COPY } from '../config/experienceCopy.ts';
 export const en = {
+  ...EXPERIENCE_COPY.en,
   ...BRAND_COPY.en,
   galleryPreview: 'Demo / stock',
   galleryNote:
@@ -217,3 +219,4 @@ export const en = {
 export type Translation = {
   [K in keyof typeof en]: (typeof en)[K] extends string ? string : { [P in keyof (typeof en)[K]]: string };
 };
+
