@@ -52,7 +52,7 @@ export const ps: Translation = {
     all: 'ټول',
     exterior: 'بهرنۍ بڼه',
     interior: 'داخلي ښکلا',
-    dining: 'د خوړو تالار',
+    dining: 'د خوړو فضا',
     kitchen: 'پخلنځی',
     experience: 'مېلمستیا',
   },
@@ -214,4 +214,3 @@ export const ps: Translation = {
   dessertTitle: 'یو خوږ انتخاب.',
   dessertBody: 'له ونیلا او چاکلیټ تر پستې او قلفې پورې.',
 };
-

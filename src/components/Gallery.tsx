@@ -5,13 +5,19 @@ import { interpolate, useLanguage } from '../i18n/LanguageContext';
 import { Dialog } from './Dialog';
 import { Photo } from './Photo';
 
-const FILTERS = VENUE_FILTERS;
+// Dining and guest moments share one atmosphere collection; preserve photo metadata.
+const FILTERS = VENUE_FILTERS.filter((value) => value !== 'experience');
 type Filter = (typeof FILTERS)[number];
 export function Gallery() {
   const { t, language, number } = useLanguage();
   const [filter, setFilter] = useState<Filter>('all');
   const [selected, setSelected] = useState<string | null>(null);
-  const photos = SITE_IMAGES.gallery.filter((photo) => filter === 'all' || filter === photo.category);
+  const photos = SITE_IMAGES.gallery.filter(
+    (photo) =>
+      filter === 'all' ||
+      filter === photo.category ||
+      (filter === 'dining' && photo.category === 'experience'),
+  );
   const index = photos.findIndex((photo) => photo.id === selected);
   const current = index >= 0 ? photos[index] : null;
   const hasPreviews = SITE_IMAGES.gallery.some((photo) => photo.image.preview);
@@ -19,17 +25,29 @@ export function Gallery() {
   const move = (offset: number) => setSelected(photos[(index + offset + photos.length) % photos.length].id);
   return (
     <section id="gallery" className="gallery-section section-space container">
-      <div className="section-heading heading-split">
-        <div>
-          <span className="eyebrow">{t.galleryEyebrow}</span>
-          <h1>{t.galleryTitle}</h1>
+      <div className="gallery-hero">
+        <div className="gallery-hero-copy">
+          <div className="section-heading">
+            <div>
+              <span className="eyebrow">{t.galleryEyebrow}</span>
+              <h1>{t.galleryHeroTitle}</h1>
+              <p>{t.galleryHeroBody}</p>
+            </div>
+            <span className="outlined-label">
+              {hasRealPhotos ? t.galleryReal : t.galleryPreview}
+              <ArrowUpRight size={14} />
+            </span>
+          </div>
+          {hasPreviews && (
+            <p className="gallery-note">{hasRealPhotos ? t.galleryMixedNote : t.galleryNote}</p>
+          )}
         </div>
-        <span className="outlined-label">
-          {hasRealPhotos ? t.galleryReal : t.galleryPreview}
-          <ArrowUpRight size={14} />
-        </span>
+        <Photo
+          image={SITE_IMAGES.venue['interior-architecture']}
+          priority
+          sizes="(max-width:760px) 94vw, 45vw"
+        />
       </div>
-      {hasPreviews && <p className="gallery-note">{hasRealPhotos ? t.galleryMixedNote : t.galleryNote}</p>}
       <div className="filter-list gallery-filters" role="group" aria-label={t.nav.gallery}>
         {FILTERS.map((value) => (
           <button
@@ -55,7 +73,7 @@ export function Gallery() {
               {photo.image.preview ? t.galleryPreview : t.galleryReal}
             </span>
             <span className="gallery-tile-label">
-              {t.galleryCategories[photo.category as Exclude<Filter, 'all'>]}
+              {t.galleryCategories[photo.category as keyof typeof t.galleryCategories]}
               <Expand size={19} />
             </span>
           </button>

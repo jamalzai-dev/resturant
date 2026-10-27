@@ -16,7 +16,14 @@ import {
 import { MENU, type Category, type MenuItem, type PizzaSize } from '../data/menu';
 import { BUSINESS } from '../config/business';
 import { DEMO_DRINKS } from '../data/drinks';
-import { FOOD_FILTERS, matchesSearch, menuScope, scopedMenu, type FoodFilter, type MenuSectionId } from '../config/menuTaxonomy';
+import {
+  FOOD_FILTERS,
+  matchesSearch,
+  menuScope,
+  scopedMenu,
+  type FoodFilter,
+  type MenuSectionId,
+} from '../config/menuTaxonomy';
 import { MenuTabs } from './MenuTabs';
 import { SECTIONS } from '../config/sections';
 import { ContactLink } from './ContactLink';
@@ -164,48 +171,160 @@ export function MenuSection() {
   const scopeKey = `${section}-${filter}-${category}`;
   const [previousScope, setPreviousScope] = useState(scopeKey);
   // Reset during rendering so a delayed effect cannot erase freshly typed input.
-  if (previousScope !== scopeKey) { setPreviousScope(scopeKey); setQuery(''); setLimit(SECTIONS.menuPageSize); }
+  if (previousScope !== scopeKey) {
+    setPreviousScope(scopeKey);
+    setQuery('');
+    setLimit(SECTIONS.menuPageSize);
+  }
   const filtersRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const list = filtersRef.current;
     const active = list?.querySelector<HTMLElement>('[aria-pressed="true"]');
     if (!list || !active) return;
-    const reveal = () => list.scrollBy({left: active.getBoundingClientRect().left - list.getBoundingClientRect().left - (list.clientWidth - active.clientWidth) / 2, behavior:'instant'});
+    const reveal = () =>
+      list.scrollBy({
+        left:
+          active.getBoundingClientRect().left -
+          list.getBoundingClientRect().left -
+          (list.clientWidth - active.clientWidth) / 2,
+        behavior: 'instant',
+      });
     const frame = requestAnimationFrame(reveal);
-    const observer = new ResizeObserver(reveal); observer.observe(list); observer.observe(active);
-    return () => {cancelAnimationFrame(frame); observer.disconnect();};
+    const observer = new ResizeObserver(reveal);
+    observer.observe(list);
+    observer.observe(active);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
   }, [section, filter, language]);
-  function selectSection(value: MenuSectionId) { setParams({section:value}); }
-  function selectFilter(value: FoodFilter) { setParams({section:'foods', ...(value === 'all' ? {} : {filter:value})}); }
+  function selectSection(value: MenuSectionId) {
+    setParams({ section: value });
+  }
+  function selectFilter(value: FoodFilter) {
+    setParams({ section: 'foods', ...(value === 'all' ? {} : { filter: value }) });
+  }
   const filtered = scopedMenu(scope, query);
-  const drinks = BUSINESS.demo ? DEMO_DRINKS.filter(item => matchesSearch(item, query)) : [];
+  const drinks = BUSINESS.demo ? DEMO_DRINKS.filter((item) => matchesSearch(item, query)) : [];
   const total = section === 'drinks' ? drinks.length : filtered.length;
   const visible = filtered.slice(0, limit);
   const compact = !!query.trim();
-  return <section id="menu" className="menu-section section-space">
-    <div className="container">
-      <div className="section-heading centered"><span className="eyebrow">{t.menuEyebrow}</span><h1>{t.menuTitle}</h1><p>{t.menuBody}</p></div>
-      <MenuTabs selected={section} onSelect={selectSection}/>
-      <div role="tabpanel" id="menu-panel" aria-labelledby={`tab-${section}`} tabIndex={0}>
-        <div className="menu-search"><Search size={18}/><input aria-label={t.searchMenu} placeholder={`${t.searchPlaceholder} · ${t.menuSections[section]}`} value={query} onChange={event => {setQuery(event.target.value); setLimit(SECTIONS.menuPageSize);}}/>{query && <button onClick={() => setQuery('')} aria-label={t.clearSearch}><X size={17}/></button>}</div>
-        {section === 'foods' && <>
-          <div ref={filtersRef} className="filter-list menu-filters" role="group" aria-label={t.foodFilterLabel}>
-            {FOOD_FILTERS.map(value => <button key={value} aria-pressed={filter === value} className={filter === value ? 'active' : ''} onClick={() => selectFilter(value)}>{t.foodFilters[value]}</button>)}
-          </div>
-          {category !== 'all' && <div className="legacy-category"><span>{t.categories[category]}</span><button onClick={() => selectFilter('all')} className="text-link">{t.clearCategory}<X size={16}/></button></div>}
-          {(filter === 'popular' || filter === 'special') && <p className="collection-note">{t.curatedNote}</p>}
-        </>}
-        {section === 'drinks' && <p className="demo-menu-note">{BUSINESS.demo ? t.drinksNote : t.drinksEmpty}</p>}
-        <p className="menu-result-count" role="status">{interpolate(t.menuResults,{shown:number(section === 'drinks' ? drinks.length : visible.length),total:number(total)})}</p>
-        <div className={`menu-grid ${compact ? 'menu-list' : ''}`} key={`${section}-${filter}-${category}`}>
-          {section === 'drinks' ? drinks.map(item => <article className="menu-card demo-drink-card" key={item.id} data-demo-drink={item.id}>
-            <div className="dish-line-icon" aria-hidden="true"><GlassWater size={48} strokeWidth={1}/></div><div className="menu-card-body"><span className="eyebrow">{t.demoExample}</span><h3>{item.name[language]}</h3><p>{item.description[language]}</p><div className="menu-card-bottom"><ContactLink className="ask-price">{t.askPrice}<ArrowUpRight className="directional" size={16}/></ContactLink></div></div>
-          </article>) : visible.map(item => <MenuCard key={item.id} item={item} compact={compact}/>)}
+  return (
+    <section id="menu" className="menu-section section-space">
+      <div className="container">
+        <div className="section-heading centered">
+          <span className="eyebrow">{t.menuEyebrow}</span>
+          <h1>{t.menuTitle}</h1>
+          <p>{t.menuBody}</p>
         </div>
-        {!total && (section !== 'drinks' || BUSINESS.demo) && <div className="menu-empty"><Search size={28}/><h3>{t.noResults}</h3><p>{t.noResultsBody}</p></div>}
-        {section !== 'drinks' && visible.length < filtered.length && <button className="button secondary menu-more" onClick={() => setLimit(current => current + SECTIONS.menuPageSize)}>{t.showMore}<Plus size={17}/></button>}
+        <MenuTabs selected={section} onSelect={selectSection} />
+        <div role="tabpanel" id="menu-panel" aria-labelledby={`tab-${section}`} tabIndex={0}>
+          <div className="menu-search">
+            <Search size={18} />
+            <input
+              aria-label={t.searchMenu}
+              placeholder={`${t.searchPlaceholder} · ${t.menuSections[section]}`}
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setLimit(SECTIONS.menuPageSize);
+              }}
+            />
+            {query && (
+              <button onClick={() => setQuery('')} aria-label={t.clearSearch}>
+                <X size={17} />
+              </button>
+            )}
+          </div>
+          {section === 'foods' && (
+            <>
+              <div
+                ref={filtersRef}
+                className="filter-list menu-filters"
+                role="group"
+                aria-label={t.foodFilterLabel}
+              >
+                {FOOD_FILTERS.map((value) => (
+                  <button
+                    key={value}
+                    aria-pressed={filter === value}
+                    className={filter === value ? 'active' : ''}
+                    onClick={() => selectFilter(value)}
+                  >
+                    {t.foodFilters[value]}
+                  </button>
+                ))}
+              </div>
+              {category !== 'all' && (
+                <div className="legacy-category">
+                  <span>{t.categories[category]}</span>
+                  <button onClick={() => selectFilter('all')} className="text-link">
+                    {t.clearCategory}
+                    <X size={16} />
+                  </button>
+                </div>
+              )}
+              {(filter === 'popular' || filter === 'special') && (
+                <p className="collection-note">{t.curatedNote}</p>
+              )}
+            </>
+          )}
+          {section === 'drinks' && (
+            <p className="demo-menu-note">{BUSINESS.demo ? t.drinksNote : t.drinksEmpty}</p>
+          )}
+          <p className="menu-result-count" role="status">
+            {interpolate(t.menuResults, {
+              shown: number(section === 'drinks' ? drinks.length : visible.length),
+              total: number(total),
+            })}
+          </p>
+          <div className={`menu-grid ${compact ? 'menu-list' : ''}`}>
+            {section === 'drinks'
+              ? drinks.map((item) => (
+                  <article className="menu-card demo-drink-card" key={item.id} data-demo-drink={item.id}>
+                    <div className="dish-line-icon" aria-hidden="true">
+                      <GlassWater size={48} strokeWidth={1} />
+                    </div>
+                    <div className="menu-card-body">
+                      <span className="eyebrow">{t.demoExample}</span>
+                      <h3>{item.name[language]}</h3>
+                      <p>{item.description[language]}</p>
+                      <div className="menu-card-bottom">
+                        <ContactLink className="ask-price">
+                          {t.askPrice}
+                          <ArrowUpRight className="directional" size={16} />
+                        </ContactLink>
+                      </div>
+                    </div>
+                  </article>
+                ))
+              : visible.map((item) => <MenuCard key={item.id} item={item} compact={compact} />)}
+          </div>
+          {!total && (section !== 'drinks' || BUSINESS.demo) && (
+            <div className="menu-empty">
+              <Search size={28} />
+              <h3>{t.noResults}</h3>
+              <p>{t.noResultsBody}</p>
+            </div>
+          )}
+          {section !== 'drinks' && visible.length < filtered.length && (
+            <button
+              className="button secondary menu-more"
+              onClick={() => setLimit((current) => current + SECTIONS.menuPageSize)}
+            >
+              {t.showMore}
+              <Plus size={17} />
+            </button>
+          )}
+        </div>
+        <div className="menu-footnote">
+          <Phone size={14} />
+          <p>
+            {t.menuPriceNote}
+            {MENU.some((item) => item.image?.preview) && <span>{t.photoNote}</span>}
+          </p>
+        </div>
       </div>
-      <div className="menu-footnote"><Phone size={14}/><p>{t.menuPriceNote}{MENU.some(item => item.image?.preview) && <span>{t.photoNote}</span>}</p></div>
-    </div>
-  </section>;
+    </section>
+  );
 }

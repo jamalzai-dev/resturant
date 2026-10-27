@@ -19,7 +19,6 @@ export function Header() {
   useEffect(() => {
     const handler = () => {
       setScrolled(window.scrollY > 24);
-
     };
     window.addEventListener('scroll', handler, { passive: true });
     handler();
@@ -36,7 +35,9 @@ export function Header() {
     const closeOnDesktop = () => {
       if (desktop.matches) {
         if (!document.querySelector('dialog[open]')) {
-          requestAnimationFrame(() => document.querySelector<HTMLAnchorElement>('.desktop-nav a[aria-current]')?.focus());
+          requestAnimationFrame(() =>
+            document.querySelector<HTMLAnchorElement>('.desktop-nav a[aria-current]')?.focus(),
+          );
         }
         setMobileOpen(false);
       }
@@ -50,7 +51,16 @@ export function Header() {
   }, [mobileOpen]);
   return (
     <>
-      <a className="skip-link" href="#main" onClick={(event) => { event.preventDefault(); const main = document.getElementById("main"); main?.focus(); main?.scrollIntoView(); }}>
+      <a
+        className="skip-link"
+        href="#main"
+        onClick={(event) => {
+          event.preventDefault();
+          const main = document.getElementById('main');
+          main?.focus();
+          main?.scrollIntoView();
+        }}
+      >
         {t.skip}
       </a>
       <div className="topbar">
@@ -106,12 +116,7 @@ export function Header() {
         {mobileOpen && (
           <nav id="mobile-navigation" className="mobile-nav" aria-label={t.openNav}>
             {NAVIGATION.map((key, index) => (
-              <NavLink
-                key={key}
-                to={PAGE_PATHS[key]}
-                end
-                onClick={() => setMobileOpen(false)}
-              >
+              <NavLink key={key} to={PAGE_PATHS[key]} end onClick={() => setMobileOpen(false)}>
                 <span className="nav-number" aria-hidden="true">
                   0{index + 1}
                 </span>

@@ -13,5 +13,11 @@ export function legacyCategory(params: URLSearchParams): Category {
   return 'all';
 }
 export const LEGACY_PATHS: Record<string, string> = {
-  home: '/', main: '/#main', menu: '/menu', signature: '/menu#signature', gallery: '/gallery', contact: '/about#contact', about: '/about',
+  home: '/',
+  main: '/#main',
+  menu: '/menu',
+  signature: '/menu#signature',
+  gallery: '/gallery',
+  contact: '/about#contact',
+  about: '/about',
 };

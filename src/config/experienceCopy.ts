@@ -2,14 +2,25 @@
 export const EXPERIENCE_COPY = {
   en: {
     menuSections: { foods: 'Foods', drinks: 'Drinks', juices: 'Juices', 'ice-cream': 'Ice Cream' },
-    foodFilters: { all: 'All Foods', popular: 'Popular Foods', special: 'Special Foods', fast: 'Fast Foods', traditional: 'Traditional Foods' },
+    foodFilters: {
+      all: 'All Foods',
+      popular: 'Popular Foods',
+      special: 'Special Foods',
+      fast: 'Fast Foods',
+      traditional: 'Traditional Foods',
+    },
     exploreMenu: 'Explore Our Menu',
     exploreCategories: 'Something for every craving.',
     categoryIntro: 'From a generous meal to a little something sweet.',
     experienceEyebrow: 'Around the table',
     experienceTitle: 'Come for the food.\nStay for the company.',
-    experienceBody: 'A pizza to share, a familiar Afghan dish, a long conversation. Discover a menu made for choosing together.',
-    experienceThemes: { share: 'Made for sharing', variety: 'A taste for every mood', welcome: 'Make yourself at home' },
+    experienceBody:
+      'A pizza to share, a familiar Afghan dish, a long conversation. Discover a menu made for choosing together.',
+    experienceThemes: {
+      share: 'Made for sharing',
+      variety: 'A taste for every mood',
+      welcome: 'Make yourself at home',
+    },
     discoverStory: 'Discover Our Story',
     previewTitle: 'A little atmosphere.',
     previewBody: 'Explore the spaces and moments behind this restaurant concept.',
@@ -18,30 +29,54 @@ export const EXPERIENCE_COPY = {
     ctaBody: 'Take your time, explore the menu and put together a meal to enjoy.',
     contactUs: 'Plan Your Visit',
     curatedNote: 'Editorial selections from the menu, not a sales ranking.',
-    drinksNote: 'Demo examples only. Offerings, prices and availability are unconfirmed. These examples cannot be added to an order.',
+    drinksNote:
+      'Demo examples only. Offerings, prices and availability are unconfirmed. These examples cannot be added to an order.',
     demoExample: 'Demo example',
     drinksEmpty: 'The drinks selection has not been confirmed yet. Please ask the restaurant.',
     clearCategory: 'Show all foods',
     foodFilterLabel: 'Food collections',
     menuSectionLabel: 'Menu sections',
     aboutHeroTitle: 'Good food brings\nus together.',
-    aboutHeroBody: 'Pizza, Afghan favourites and something refreshing. Get to know the idea behind {shortName}.',
+    aboutHeroBody:
+      'Pizza, Afghan favourites and something refreshing. Get to know the idea behind {shortName}.',
     valuesTitle: 'The things we make room for.',
-    values: { food: 'Food worth sharing', foodBody: 'From pizza sizes to family platters, choose a meal that fits your table.', care: 'Thoughtful choices', careBody: 'Clear descriptions and prices help you explore. Ask the restaurant about ingredients and availability.', together: 'Time together', togetherBody: 'A relaxed meal begins with a simple plan. Speak with the restaurant to arrange your visit.' },
+    values: {
+      food: 'Food worth sharing',
+      foodBody: 'From pizza sizes to family platters, choose a meal that fits your table.',
+      care: 'Thoughtful choices',
+      careBody:
+        'Clear descriptions and prices help you explore. Ask the restaurant about ingredients and availability.',
+      together: 'Time together',
+      togetherBody:
+        'A relaxed meal begins with a simple plan. Speak with the restaurant to arrange your visit.',
+    },
     atmosphereTitle: 'Picture your next gathering.',
-    aboutDemo: 'This is a restaurant template. The story and images introduce a hospitality concept; confirmed business details will appear here when supplied.',
+    aboutDemo:
+      'This is a restaurant template. The story and images introduce a hospitality concept; confirmed business details will appear here when supplied.',
     galleryHeroBody: 'Warm light, welcoming tables and the details that make a place feel inviting.',
+    galleryHeroTitle: 'A sense of place.',
   },
   ps: {
     menuSections: { foods: 'خواړه', drinks: 'څښاک', juices: 'جوسونه', 'ice-cream': 'ایسکریم' },
-    foodFilters: { all: 'ټول خواړه', popular: 'خوښ شوي خواړه', special: 'ځانګړي خواړه', fast: 'چټک خواړه', traditional: 'دودیز خواړه' },
+    foodFilters: {
+      all: 'ټول خواړه',
+      popular: 'خوښ شوي خواړه',
+      special: 'ځانګړي خواړه',
+      fast: 'چټک خواړه',
+      traditional: 'دودیز خواړه',
+    },
     exploreMenu: 'زموږ مېنو وګورئ',
     exploreCategories: 'د هرې خوښې لپاره یو څه.',
     categoryIntro: 'له بشپړو خوړو تر لږ څه خوږو پورې.',
     experienceEyebrow: 'د مېز شاوخوا',
     experienceTitle: 'د خوړو لپاره راشئ.\nله ملګرو سره پاتې شئ.',
-    experienceBody: 'د شریکولو پیزا، اشنا افغاني خواړه او اوږدې خبرې. هغه مېنو وګورئ چې یوځای ترې خواړه غوره کولای شئ.',
-    experienceThemes: { share: 'د شریکولو لپاره', variety: 'د هرې خوښې خوند', welcome: 'ځان په خپل کور کې وګڼئ' },
+    experienceBody:
+      'د شریکولو پیزا، اشنا افغاني خواړه او اوږدې خبرې. هغه مېنو وګورئ چې یوځای ترې خواړه غوره کولای شئ.',
+    experienceThemes: {
+      share: 'د شریکولو لپاره',
+      variety: 'د هرې خوښې خوند',
+      welcome: 'ځان په خپل کور کې وګڼئ',
+    },
     discoverStory: 'زموږ کیسه ولولئ',
     previewTitle: 'د فضا یوه څنډه.',
     previewBody: 'د دې رسټورانټ د بېلګې ځایونه او شېبې وګورئ.',
@@ -59,9 +94,19 @@ export const EXPERIENCE_COPY = {
     aboutHeroTitle: 'ښه خواړه موږ\nسره یوځای کوي.',
     aboutHeroBody: 'پیزا، افغاني خواړه او تازه څښاک. د {shortName} له نظر سره اشنا شئ.',
     valuesTitle: 'هغه څه چې ځای ورکوو.',
-    values: { food: 'د شریکولو خواړه', foodBody: 'د پیزا له اندازو تر کورنیو پلیټرو، د خپل مېز لپاره مناسب خواړه غوره کړئ.', care: 'په فکر انتخاب', careBody: 'روښانه بیې او تشریح په انتخاب کې مرسته کوي. د موادو او شتون په اړه له رسټورانټ څخه پوښتنه وکړئ.', together: 'یوځای وخت', togetherBody: 'ارام خواړه له ساده پلان څخه پیلېږي. د خپل راتګ لپاره له رسټورانټ سره خبرې وکړئ.' },
+    values: {
+      food: 'د شریکولو خواړه',
+      foodBody: 'د پیزا له اندازو تر کورنیو پلیټرو، د خپل مېز لپاره مناسب خواړه غوره کړئ.',
+      care: 'په فکر انتخاب',
+      careBody:
+        'روښانه بیې او تشریح په انتخاب کې مرسته کوي. د موادو او شتون په اړه له رسټورانټ څخه پوښتنه وکړئ.',
+      together: 'یوځای وخت',
+      togetherBody: 'ارام خواړه له ساده پلان څخه پیلېږي. د خپل راتګ لپاره له رسټورانټ سره خبرې وکړئ.',
+    },
     atmosphereTitle: 'خپله راتلونکې ناسته تصور کړئ.',
-    aboutDemo: 'دا د رسټورانټ یوه بېلګه ده. کیسه او انځورونه د مېلمه پالنې نظر ښيي؛ اصلي معلومات به د برابرېدو وروسته دلته ښکاره شي.',
+    aboutDemo:
+      'دا د رسټورانټ یوه بېلګه ده. کیسه او انځورونه د مېلمه پالنې نظر ښيي؛ اصلي معلومات به د برابرېدو وروسته دلته ښکاره شي.',
     galleryHeroBody: 'توده رڼا، ښایسته مېزونه او هغه جزئیات چې ځای په زړه پورې کوي.',
+    galleryHeroTitle: 'د ځای احساس.',
   },
 };

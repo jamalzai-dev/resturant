@@ -17,7 +17,7 @@ export default defineConfig({
           description,
           'og:title': title,
           'og:description': description,
-          'theme-color': THEME.primary,
+          'theme-color': THEME.paper,
         };
         return html
           .replace(/<title>.*?<\/title>/, `<title>${escapeHtml(title)}</title>`)

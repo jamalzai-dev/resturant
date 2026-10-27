@@ -41,6 +41,11 @@ for (const language of ['en', 'ps']) {
   await audit(language, 'about');
   await page.goto('http://127.0.0.1:5173/#/menu');
   await audit(language, 'menu');
+  for (const section of ['drinks', 'juices', 'ice-cream']) {
+    await page.goto('http://127.0.0.1:5173/#/menu?section=' + section);
+    await audit(language, 'menu-' + section);
+  }
+  await page.goto('http://127.0.0.1:5173/#/menu');
   if (language === 'en') await page.locator('.platter-actions .add-button').click();
   await page.locator('.order-button').click();
   await audit(language, 'cart');
@@ -48,6 +53,18 @@ for (const language of ['en', 'ps']) {
   await page.locator('.drawer-summary > .button').click();
   await audit(language, 'ticket');
   await page.locator('.dialog-close').click();
+}
+await page.setViewportSize({ width: 390, height: 844 });
+for (const language of ['en', 'ps']) {
+  if ((await page.locator('html').getAttribute('lang')) !== language)
+    await page.locator('.language-button').click();
+  for (const path of ['', 'menu', 'gallery', 'about']) {
+    await page.goto('http://127.0.0.1:5173/#/' + path);
+    await audit(language, 'mobile-' + (path || 'home'));
+  }
+  await page.locator('.mobile-toggle').click();
+  await audit(language, 'mobile-navigation');
+  await page.keyboard.press('Escape');
 }
 await browser.close();
 await mkdir('.qa', { recursive: true });

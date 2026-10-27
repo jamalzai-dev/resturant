@@ -13,6 +13,7 @@ test('pizza sizes, delivery minimums, ticket copy/download, pickup and persisten
   await page.locator('.order-button').click();
   await expect(page.getByRole('heading', { name: 'Your order is empty.' })).toBeVisible();
   await page.getByRole('link', { name: 'Browse the menu' }).click();
+  await expect(page).toHaveURL(/#\/menu$/);
   const pizza = page.locator('[data-dish="special-pizza"]');
   await pizza.getByRole('radio', { name: 'Medium', exact: true }).check();
   await expect(pizza.locator('.dish-price')).toHaveText('300 AFN');
@@ -67,15 +68,31 @@ test('pizza sizes, delivery minimums, ticket copy/download, pickup and persisten
 test('all menu dishes are browsable, search is bilingual, and feature links select categories', async ({
   page,
 }) => {
-  for (const [category, count] of [['pizza',11],['rice',6],['kebab',5],['rolls',6],['burgers',2],['crispy',6],['platter',4],['juice',12],['dessert',9]] as const) {
+  for (const [category, count] of [
+    ['pizza', 11],
+    ['rice', 6],
+    ['kebab', 5],
+    ['rolls', 6],
+    ['burgers', 2],
+    ['crispy', 6],
+    ['platter', 4],
+    ['juice', 12],
+    ['dessert', 9],
+  ] as const) {
     await page.goto('/#/menu?category=' + category);
-    await expect(page.getByRole('tab', {selected:true})).toHaveText(category === 'juice' ? 'Juices' : category === 'dessert' ? 'Ice Cream' : 'Foods');
-    await expect(page.locator('.menu-card')).toHaveCount(Math.min(count,9));
-    while (await page.getByRole('button', { name: 'Show more dishes' }).isVisible()) await page.getByRole('button', { name: 'Show more dishes' }).click();
+    await expect(page.getByRole('tab', { selected: true })).toHaveText(
+      category === 'juice' ? 'Juices' : category === 'dessert' ? 'Ice Cream' : 'Foods',
+    );
+    await expect(page.locator('.menu-card')).toHaveCount(Math.min(count, 9));
+    while (await page.getByRole('button', { name: 'Show more dishes' }).isVisible())
+      await page.getByRole('button', { name: 'Show more dishes' }).click();
     await expect(page.locator('.menu-card')).toHaveCount(count);
   }
-  await page.getByRole('tab', {name:'Juices',exact:true}).click();
-  await expect(page.getByRole('tab',{name:'Juices',exact:true})).toHaveAttribute('aria-selected','true');
+  await page.getByRole('tab', { name: 'Juices', exact: true }).click();
+  await expect(page.getByRole('tab', { name: 'Juices', exact: true })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
   await page.getByRole('textbox', { name: 'Search the menu' }).fill('مالټه');
   await expect(page.locator('.menu-card')).toHaveCount(1);
   await expect(page.locator('.menu-card')).toContainText('Orange / Malta Juice');
@@ -83,7 +100,10 @@ test('all menu dishes are browsable, search is bilingual, and feature links sele
   await expect(page.getByText('No dishes found.', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Clear search' }).click();
   await page.getByRole('link', { name: 'Explore Ice Creams' }).click();
-  await expect(page.getByRole('tab', {name:'Ice Cream',exact:true})).toHaveAttribute('aria-selected','true');
+  await expect(page.getByRole('tab', { name: 'Ice Cream', exact: true })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
   await expect(page.locator('[data-dish="vanilla"] .dish-price')).toHaveText('70 AFN');
   await page
     .locator('[data-dish="vanilla"]')
@@ -119,9 +139,8 @@ test('pizza sizes, priced platters, venue gallery and keyboard controls', async 
     ['All', 7],
     ['Exterior', 2],
     ['Interior', 1],
-    ['Dining Hall', 2],
+    ['Dining Atmosphere', 3],
     ['Kitchen', 1],
-    ['Experience', 1],
   ] as const) {
     await page.locator('.gallery-filters').getByRole('button', { name: category, exact: true }).click();
     await expect(page.locator('.gallery-tile')).toHaveCount(count);
@@ -236,7 +255,7 @@ test('broken image, invalid persisted order, and clipboard fallback remain usabl
   await page.locator('.order-button').click();
   await expect(page.getByRole('heading', { name: 'Your order is empty.' })).toBeVisible();
   await page.keyboard.press('Escape');
-  await page.getByRole('button', {name:'All Foods',exact:true}).click();
+  await page.getByRole('button', { name: 'All Foods', exact: true }).click();
   await page.getByRole('textbox', { name: 'Search the menu' }).fill('shawarma');
   await page
     .locator('[data-dish="shawarma"]')
@@ -255,21 +274,42 @@ test('all menu dishes have distinct responsive images and platter previews track
   page,
 }) => {
   const sources = new Set<string>();
-  for (const [section,count] of [['foods',40],['juices',12],['ice-cream',9]] as const) {
+  for (const [section, count] of [
+    ['foods', 40],
+    ['juices', 12],
+    ['ice-cream', 9],
+  ] as const) {
     await page.goto('/#/menu?section=' + section);
     await expect(page.locator('.menu-card')).toHaveCount(9);
-    while (await page.getByRole('button',{name:'Show more dishes'}).isVisible()) await page.getByRole('button',{name:'Show more dishes'}).click();
+    while (await page.getByRole('button', { name: 'Show more dishes' }).isVisible())
+      await page.getByRole('button', { name: 'Show more dishes' }).click();
     await expect(page.locator('.menu-card')).toHaveCount(count);
-    const records = await page.locator('.menu-card').evaluateAll(cards => cards.map(card => {
-      const img = card.querySelector('img')!;
-      return {id:card.getAttribute('data-dish'),src:img.getAttribute('src'),srcset:img.srcset,loading:img.loading};
-    }));
+    const records = await page.locator('.menu-card').evaluateAll((cards) =>
+      cards.map((card) => {
+        const img = card.querySelector('img')!;
+        return {
+          id: card.getAttribute('data-dish'),
+          src: img.getAttribute('src'),
+          srcset: img.srcset,
+          loading: img.loading,
+        };
+      }),
+    );
     for (const record of records) {
       expect(record.src).toBe(`/images/menu/${record.id}-1440.webp`);
       expect(record.srcset).toContain(`${record.id}-640.webp 640w`);
-      expect(record.loading).toBe('lazy'); sources.add(record.src!);
+      expect(record.loading).toBe('lazy');
+      sources.add(record.src!);
     }
-    await page.locator('.menu-card img').evaluateAll(async elements => { await Promise.all(elements.map(async image => { const img = image as HTMLImageElement; img.loading='eager'; await img.decode(); })); });
+    await page.locator('.menu-card img').evaluateAll(async (elements) => {
+      await Promise.all(
+        elements.map(async (image) => {
+          const img = image as HTMLImageElement;
+          img.loading = 'eager';
+          await img.decode();
+        }),
+      );
+    });
     await expect(page.locator('.menu-card .photo.is-loaded')).toHaveCount(count);
   }
   expect(sources.size).toBe(MENU.length);
@@ -299,10 +339,13 @@ test('all menu dishes have distinct responsive images and platter previews track
 
 test('category shortcuts, refreshment links, reservation inquiry and unpriced dishes', async ({ page }) => {
   await page.goto('/');
-  for (const [index, category] of ['Foods','Drinks','Juices','Ice Cream'].entries()) {
+  for (const [index, category] of ['Foods', 'Drinks', 'Juices', 'Ice Cream'].entries()) {
     await page.goto('/');
     await page.locator('.category-previews a').nth(index).click();
-    await expect(page.getByRole('tab',{name:category,exact:true})).toHaveAttribute('aria-selected','true');
+    await expect(page.getByRole('tab', { name: category, exact: true })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
   }
   await page.goto('/');
   await page.getByRole('button', { name: 'Book a Table', exact: true }).click();
@@ -371,7 +414,7 @@ test('selected filter stays visible after language and viewport changes', async 
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/#/menu?category=pizza');
-  await page.getByRole('tab', { name: 'Ice Cream', exact:true }).click();
+  await page.getByRole('tab', { name: 'Ice Cream', exact: true }).click();
   for (const language of ['en', 'ps']) {
     if (language === 'ps') await page.locator('.language-button').click();
     for (const width of [390, 320, 768]) {

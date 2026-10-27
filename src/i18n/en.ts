@@ -51,7 +51,7 @@ export const en = {
     all: 'All',
     exterior: 'Exterior',
     interior: 'Interior',
-    dining: 'Dining Hall',
+    dining: 'Dining Atmosphere',
     kitchen: 'Kitchen',
     experience: 'Experience',
   },
@@ -219,4 +219,3 @@ export const en = {
 export type Translation = {
   [K in keyof typeof en]: (typeof en)[K] extends string ? string : { [P in keyof (typeof en)[K]]: string };
 };
-

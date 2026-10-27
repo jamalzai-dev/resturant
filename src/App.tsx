@@ -35,10 +35,26 @@ export default function App() {
       script.remove();
     };
   }, []);
-  return <HashRouter><LanguageProvider><OrderProvider><Routes><Route element={<SiteLayout />}>
-    <Route index element={<HomePage />} /><Route path="menu" element={<MenuPage />} />
-    <Route path="gallery" element={<GalleryPage />} /><Route path="about" element={<AboutPage />} />
-    {Object.entries(LEGACY_PATHS).filter(([key])=>!['menu','gallery','about'].includes(key)).map(([key,path])=><Route key={key} path={key} element={<Navigate to={path} replace />} />)}
-    <Route path="*" element={<Navigate to="/" replace />} />
-  </Route></Routes></OrderProvider></LanguageProvider></HashRouter>;
+  return (
+    <HashRouter>
+      <LanguageProvider>
+        <OrderProvider>
+          <Routes>
+            <Route element={<SiteLayout />}>
+              <Route index element={<HomePage />} />
+              <Route path="menu" element={<MenuPage />} />
+              <Route path="gallery" element={<GalleryPage />} />
+              <Route path="about" element={<AboutPage />} />
+              {Object.entries(LEGACY_PATHS)
+                .filter(([key]) => !['menu', 'gallery', 'about'].includes(key))
+                .map(([key, path]) => (
+                  <Route key={key} path={key} element={<Navigate to={path} replace />} />
+                ))}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
+          </Routes>
+        </OrderProvider>
+      </LanguageProvider>
+    </HashRouter>
+  );
 }

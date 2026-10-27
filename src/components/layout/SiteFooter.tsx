@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, ArrowUpRight, Sparkles } from 'lucide-react';
 import { BUSINESS, NAVIGATION } from '../../config/business';
 import { PAGE_PATHS } from '../../routing/routes';
+import { MENU_SECTIONS } from '../../config/menuTaxonomy';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { Brand } from '../Brand';
 import { ContactLink } from '../ContactLink';
@@ -21,6 +22,17 @@ export function SiteFooter() {
               {NAVIGATION.filter((item) => item !== 'home').map((key) => (
                 <Link key={key} to={PAGE_PATHS[key]}>
                   {t.nav[key]}
+                  <ArrowUpRight size={14} className="directional" />
+                </Link>
+              ))}
+            </nav>
+          </div>
+          <div className="footer-nav">
+            <span className="eyebrow">{t.nav.menu}</span>
+            <nav aria-label={t.menuSectionLabel}>
+              {MENU_SECTIONS.map((section) => (
+                <Link key={section} to={`/menu?section=${section}`}>
+                  {t.menuSections[section]}
                   <ArrowUpRight size={14} className="directional" />
                 </Link>
               ))}
@@ -52,4 +64,3 @@ export function SiteFooter() {
     </footer>
   );
 }
-
